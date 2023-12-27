@@ -26,9 +26,9 @@ jinja_parser: /somedir/data/myjson.json
 ```
 
 * output:
+```
 /somedir/components/dist/helloworld/mytemplate.html
 
-```
 <div>hello world</div>
 ```
 
