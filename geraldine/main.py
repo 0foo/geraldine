@@ -157,8 +157,11 @@ def remove_extension_from_path(file_path, extension_to_remove):
         root += extension_queue.pop()
     return root
 
-
 def run():  
+    if not os.path.exists(source_dir):
+        print(f"Can't find source directory: {source_dir}")
+        exit()
+
     load_modules()
     delete_dir(destination_dir)
     create_dir(destination_dir)

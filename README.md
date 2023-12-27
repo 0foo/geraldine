@@ -103,13 +103,15 @@ def geraldine(value_from_front_matter, template_path, template_content):
 
 * What ever you return from the function will be written to the file
 * If you return nothing, no file will be written as it's assumed you're creating the file yourself.
-* declare a top level variable to remove an extension from the file name: remove_extensions=['jinja'] 
+* Declare a top level variable to remove an extension from the file name: remove_extensions=['jinja'] 
 
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip
-* make cli options for defining input and output dirs?
-* config file for declaring custom things like max-depth input/output dir?
-* make an external folder for custom plugins
-* refactor post processing block into it's own spot
+* Make a user folder: ~/.geraldine 
+    * config file for declaring custom things like max-depth, input/output dir, etc.
+    * folder for custom plugins
+* Refactor post processing block into it's own spot
 * Implement yaml and toml parsing
+* File watching
+* Tests
