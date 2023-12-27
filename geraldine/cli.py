@@ -4,7 +4,6 @@ import os
 import main
 from pprint import pprint
 
-
 # Create the parser
 parser = argparse.ArgumentParser(description="Geraldine, a static component generator.")
 
