@@ -44,8 +44,6 @@ json_path: /somedir/data/myjson.json
 3. Add the /bin folder to the path
 4. Start using Geraldine with the `geri` command
 
-* One day I will put this on pypi
-
 ## CLI
 ```bash
 geri
