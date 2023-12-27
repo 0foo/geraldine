@@ -9,7 +9,6 @@ remove_extensions=['jinja']
 
 
 def geraldine(in_data):
-    pprint(in_data, indent=4)
     frontmatter = in_data["frontmatter"]
     json_path = frontmatter["json_path"]
     template_dir = os.path.dirname(in_data["src_path"])
@@ -18,7 +17,6 @@ def geraldine(in_data):
         start_key_list = frontmatter["start_key"].split(".")
     else:
          start_key_list = []
-    print(str(frontmatter["filename_key"]))
     filename_key = frontmatter["filename_key"].split(".")
     content = in_data["template_content"]
     destination_file = in_data["destination_path"]

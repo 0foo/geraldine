@@ -5,9 +5,9 @@
 * Geraldine converts string templates with front matter into html:
 
 
-* (/somedir/components/geri_src/helloworld/mytemplate.jinja.html)
 
 ```
+(/somedir/components/geri_src/helloworld/mytemplate.jinja.html)
 ---
 processer: jinja_parser 
 json_path: /somedir/data/myjson.json
@@ -16,8 +16,8 @@ json_path: /somedir/data/myjson.json
 
 ```
 
-* (/somedir/data/myjson.json)
 ```
+(/somedir/data/myjson.json)
 {
     "some_variable":"hello world"
 }
@@ -25,9 +25,8 @@ json_path: /somedir/data/myjson.json
 
 * run `geri` in `/somedir/components` and get output:
 
-* (/somedir/components/dist/helloworld/mytemplate.html)
-
 ```
+(/somedir/components/dist/helloworld/mytemplate.html)
 <div>hello world</div>
 ```
 
