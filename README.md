@@ -82,7 +82,7 @@ geri --info
 
 * see plugin folder: [./geraldine/plugins](./geraldine/plugins)
 
-* The name of the plugin will be the key you call in the front matter
+* The name of the plugin will be set in the `processer` field in the front matter
 
 * The plugin needs a top level function with the name `geraldine` that gets called by the main system.
 
@@ -114,5 +114,6 @@ geri --info
     * folder for custom plugins
 * Refactor post processing block into it's own spot
 * Implement yaml and toml processors
+* Better docs with examples
 * File watching
 * Tests
