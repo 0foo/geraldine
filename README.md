@@ -2,7 +2,7 @@
 
 * Do you have a bunch of JSON or YAML or TOML you want to convert to html components to keep your browser code clean?
 
-* Geri converts string templates with front matter into html:
+* Geraldine converts string templates with front matter into html:
 
 
 ```
