@@ -39,10 +39,24 @@ json_path: /somedir/data/myjson.json
 * see [./geraldine/examples](./geraldine/examples) 
 
 ## Install
+
+### Via pypi
+* Pypi is currently locked to new users due to some suspicious stuff going on.
+
+### Via wheel (best way)
+* You can pip3 install the wheel file from the dist folder and start using `geri` command.
+    * `pip3 install geraldine-0.1.0-py3-none-any.whl`
+
+### The long way
 1. Clone the repo
 2. Install the dependencies in requirements.txt (create a venv if you want)
+    * will have to put a bash script in the /bin folder to activate the venv and run the geri command or remember to activate it
 3. Add the /bin folder to the path
 4. Start using Geraldine with the `geri` command
+
+### Use Poetry
+* `poetry install`
+* `poetry run python3 cli.py -h`
 
 ## CLI
 ```bash

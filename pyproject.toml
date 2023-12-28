@@ -7,6 +7,9 @@ keywords = ["static", "content", "generator"]
 readme = "README.md"
 
 
+[tool.poetry.scripts]
+geri = "geraldine.cli:run"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 pyyaml = "6.0.1"

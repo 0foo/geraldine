@@ -2,7 +2,7 @@ import sys
 import os
 import pathlib
 import shutil
-import util
+from geraldine import util
 
 # editable configs
 destination_location="dist"
