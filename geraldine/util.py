@@ -17,16 +17,6 @@ def remove_extension_from_path(file_path, extension_to_remove):
         root += extension_queue.pop()
     return root
 
-def get_info():
-    return {
-        "install location" : script_dir,
-        "plugin path" : plugin_path 
-    }
-
-def list_plugins():
-    files = [f for f in os.listdir(plugin_path) 
-        if os.path.isfile(os.path.join(plugin_path, f))]
-    return files
 
 class DictToObject:
     def __init__(self, dictionary):

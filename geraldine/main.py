@@ -25,6 +25,16 @@ script_dir = os.path.dirname(script_path)
 plugin_path = os.path.join(script_dir, 'plugins')
 modules={}
 
+def get_info():
+    return {
+        "install location" : script_dir,
+        "plugin path" : plugin_path 
+    }
+
+def list_plugins():
+    files = [f for f in os.listdir(plugin_path) 
+        if os.path.isfile(os.path.join(plugin_path, f))]
+    return files
 
 def create_geri_src():
     util.create_dir(source_dir)
