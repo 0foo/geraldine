@@ -2,13 +2,6 @@ import sys
 import os
 import pathlib
 import shutil
-
-
-# ensure this directory on class path
-# directory_path = os.path.abspath(__file__)
-# parent_directory = os.path.dirname(os.path.dirname(directory_path))
-# sys.path.append(parent_directory)
-# sys.path.append(directory_path)
 import util
 
 # editable configs
