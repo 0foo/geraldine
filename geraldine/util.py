@@ -108,7 +108,7 @@ def create_dir(dir, gitkeep=False):
         file.close()
 
 
-def depth_first_dir_walk(path, max_depth=10, current_depth=0):
+def depth_first_dir_walk(path, max_depth=20, current_depth=0):
     """ walk the directory tree in a depth first fashion with a max_depth limit """
     if current_depth > max_depth:
         return

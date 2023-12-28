@@ -11,9 +11,13 @@ import shutil
 # sys.path.append(directory_path)
 import util
 
+# editable configs
 destination_location="dist"
+source_dir = "/geri_src"
+max_depth=10
+
 cwd = os.getcwd()
-source_dir = cwd + "/geri_src"
+source_dir = cwd + source_dir
 destination_dir = os.path.join(cwd, destination_location)
 
 script_path = os.path.abspath(__file__)
@@ -21,6 +25,9 @@ script_dir = os.path.dirname(script_path)
 plugin_path = os.path.join(script_dir, 'plugins')
 modules={}
 
+
+def create_geri_src():
+    util.create_dir(source_dir)
 
 def load_modules():
     for module in util.depth_first_dir_walk(plugin_path, max_depth=0):
@@ -37,7 +44,7 @@ def run():
     load_modules()
     util.delete_dir(destination_dir)
     util.create_dir(destination_dir)
-    for location in util.depth_first_dir_walk(source_dir):
+    for location in util.depth_first_dir_walk(source_dir, max_depth=max_depth):
         name = location.name
         extension = pathlib.Path(location.path).suffix
         full_path = location.path
