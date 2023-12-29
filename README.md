@@ -118,6 +118,38 @@ geri --info
 * Declare a top level variable to remove an extension from the file name: remove_extensions=['jinja'] 
 
 
+## Plugins so far
+* jinja_parser
+    * Simply point the front matter at a json with the the  json_path attribute. 
+    * If the json is complex can use a start_key element which populates the template with the value at that key instead of starting at the root of the json.
+        * the semantics for this are standard jq or jinja json traversal
+```
+processor: jinja_parser
+json_path: ../../../all_classes.json
+start_key: 0.class.0
+---
+<div>{{name}}</div>
+
+```
+
+
+* jinja_file_parser
+    * Creates a file from every element in the json key using this template
+    * i.e. if the json key points to an array of json, will create a new file for each json element in the array.
+
+```
+---
+processor: jinja_file_parser
+json_path: ../../../all_classes.json
+filename_key: class.0.name
+extension: html
+---
+
+<div>{{class.0.name}}</div>
+```
+
+
+
 ## To Do:
 * Stick it up on pypi to make it installable with pip
 * Make a user folder: ~/.geraldine 
