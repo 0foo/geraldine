@@ -41,7 +41,7 @@ json_path: /somedir/data/myjson.json
 ## Install
 
 ### Via pypi
-* Pypi is currently locked to new users due to some suspicious stuff going on.
+* As of this writing, pypi is currently locked to new users due to some suspicious stuff going on.
 
 ### Via wheel (best way)
 * You can pip3 install the wheel file from the dist folder and start using `geri` command.
