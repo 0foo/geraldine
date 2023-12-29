@@ -39,7 +39,7 @@ def geraldine(in_data):
     # iterate
     jinja_template = environment.from_string(content) # the jinja template
     for dict_item in dict_to_use:
-            print(dict_item)
+            # print(dict_item)
             if "{{" in filename_key and "}}" in filename_key:
                  filename = util.destination_file_name_parser(filename_key, dict_item)
             else:

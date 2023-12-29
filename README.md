@@ -148,7 +148,11 @@ extension: html
 <div>{{class.0.name}}</div>
 ```
 
-
+## Priority directories
+* For things like includes, you can define priority directories.
+* This will process everything the same except these directories will be processed first. 
+* This allows you to define a jinja template to process and use the include tag: {% include sometemplate.html %} 
+* The currently only implemented priority directory is geri_src/includes.
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip
@@ -157,6 +161,7 @@ extension: html
     * also project level config files, the code will bubble up looking for the first .geraldine config file match, and use ~/.ger.. as default if none
     * config file for declaring custom things like max-depth, input/output dir, etc.
     * folder for custom plugins
+    * priority directories
 * the functionality to point the cli at a template with/without front matter and output result to a specified parameter just wtih cli
 * Refactor post processing block into its own spot
 * Implement yaml and toml processors

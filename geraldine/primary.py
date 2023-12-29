@@ -8,6 +8,9 @@ from geraldine import util
 destination_location="geri_dist"
 source_dir = "geri_src"
 max_depth=10
+priority_directories=[
+    "includes"
+]
 
 cwd = os.getcwd()
 source_dir =  os.path.join(cwd, source_dir)
@@ -47,11 +50,22 @@ def run():
     load_modules()
     util.delete_dir(destination_dir)
     util.create_dir(destination_dir)
-    for location in util.depth_first_dir_walk(source_dir, max_depth=max_depth):
+
+    for dir_item in priority_directories:
+        the_dir = os.path.join(source_dir, dir_item)
+        if os.path.exists(the_dir):
+            process(the_dir)
+            print(f"Priority directory {the_dir} processed")
+
+    process(source_dir)
+
+
+def process(in_dir):
+    for location in util.depth_first_dir_walk(in_dir, max_depth=max_depth):
         name = location.name
         extension = pathlib.Path(location.path).suffix
         full_path = location.path
-        new_path = util.replace_path_base(full_path, source_dir, destination_dir)
+        new_path = util.replace_path_base(full_path, in_dir, destination_dir)
 
         if name == destination_location:
             continue
