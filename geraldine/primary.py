@@ -4,13 +4,13 @@ import pathlib
 import shutil
 from geraldine import util
 
-# editable configs
-destination_location="dist"
-source_dir = "/geri_src"
+# editable configs until config file functionality is implemented
+destination_location="geri_dist"
+source_dir = "geri_src"
 max_depth=10
 
 cwd = os.getcwd()
-source_dir = cwd + source_dir
+source_dir =  os.path.join(cwd, source_dir)
 destination_dir = os.path.join(cwd, destination_location)
 
 script_path = os.path.abspath(__file__)

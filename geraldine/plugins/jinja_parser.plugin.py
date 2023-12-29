@@ -1,7 +1,7 @@
 import jinja2
 import json
 import os
-import util
+from geraldine import util
 
 environment = jinja2.Environment()
 

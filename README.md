@@ -152,10 +152,13 @@ extension: html
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip
-* Make a user folder: ~/.geraldine 
+* Make config files
+    * a user folder: ~/.geraldine 
+    * also project level config files, the code will bubble up looking for the first .geraldine config file match, and use ~/.ger.. as default if none
     * config file for declaring custom things like max-depth, input/output dir, etc.
     * folder for custom plugins
-* Refactor post processing block into it's own spot
+* the functionality to point the cli at a template with/without front matter and output result to a specified parameter just wtih cli
+* Refactor post processing block into its own spot
 * Implement yaml and toml processors
 * Better docs with examples
 * File watching
