@@ -162,7 +162,23 @@ def delete_dir(dirname, error=False):
         if error:
             print("Error: %s - %s." % (e.filename, e.strerror))
 
+def clear_directory(directory):
+    # Check if the directory exists
+    if not os.path.exists(directory):
+        print("Directory does not exist:", directory)
+        return
 
+    # Remove each item in the directory
+    for item in os.listdir(directory):
+        item_path = os.path.join(directory, item)
+        
+        if os.path.isfile(item_path) or os.path.islink(item_path):
+            # It's a file or symlink - delete it
+            os.unlink(item_path)
+        elif os.path.isdir(item_path):
+            # It's a directory - delete it and all its contents
+            shutil.rmtree(item_path)
+            
 def replace_path_base(original_path, source_dir, destination_dir):
     # Remove the source directory from the original path
     relative_path = os.path.relpath(original_path, source_dir)
@@ -216,12 +232,16 @@ def start_simple_server(port=8000, directory=None):
 
     if directory:
         os.chdir(directory)
+    
+
+    directory = os.getcwd()
 
     # Create an HTTP request handler
     handler = http.server.SimpleHTTPRequestHandler
 
     # Create the HTTP server
     with socketserver.TCPServer(("", port), handler) as httpd:
+        print(f"\nServing from directory root: {directory}")
         print(f"Starting HTTP server at http://localhost:{port}")
         # Start serving requests
         httpd.serve_forever()
@@ -255,8 +275,6 @@ def get_watcher_handler(source_dir):
                     return
                 print(event)
                 self.run()
-
-
     return MyHandler
 
 def watcher(directory_to_watch, file_system_event_handler):
@@ -272,12 +290,12 @@ def watcher(directory_to_watch, file_system_event_handler):
             event_handler = file_system_event_handler()
             self.observer.schedule(event_handler, self.directory_to_watch, recursive=True)
             self.observer.start()
-            print(f"Started watching directory: {directory_to_watch}. Press Ctrl+C to stop.")
+            print(f"\nStarted watching directory: {directory_to_watch}. Press Ctrl+C to stop.")
             try:
                 while True:
                     time.sleep(1)
             except KeyboardInterrupt:
-                print("Stopping directory watcher...")
+                print("\nStopping directory watcher...")
                 self.observer.stop()
 
             self.observer.join()

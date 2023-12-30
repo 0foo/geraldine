@@ -6,6 +6,7 @@ from geraldine import util
 
 
 source_dir = primary.source_dir
+dest_dir = primary.destination_location
 
 def run():
     # Create the top-level parser
@@ -19,7 +20,7 @@ def run():
     init_parser = subparsers.add_parser('init', help='Create source directory for geraldine templates.')
 
       # Create a subparser for the 'init' command
-    watch_parser = subparsers.add_parser('watch', help='Watch geraldine source folder and rebuild changes.')
+    watch_parser = subparsers.add_parser('watch', help='Watch geraldine source folder and rebuild on change.')
 
 
     # Create a subparser for the 'serve' command
@@ -44,7 +45,7 @@ def run():
         exit()
     elif args.command == 'serve':
         port = args.port
-        util.start_simple_server(port) 
+        util.start_simple_server(port, dest_dir) 
         exit()
     elif args.command == 'watch':
         MyHandler = util.get_watcher_handler(source_dir)

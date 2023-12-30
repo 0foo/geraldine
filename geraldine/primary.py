@@ -48,8 +48,8 @@ def run():
         exit()
 
     load_modules()
-    util.delete_dir(destination_dir)
     util.create_dir(destination_dir)
+    util.clear_directory(destination_dir)
 
     for dir_item in priority_directories:
         the_dir = os.path.join(source_dir, dir_item)
