@@ -1,38 +1,56 @@
 #!/usr/bin/env python3
 import argparse
-import os
 from geraldine import primary
 from pprint import pprint
+from geraldine import util
 
 
+source_dir = primary.source_dir
 
 def run():
-    # Create the parser
-    parser = argparse.ArgumentParser(description="Geraldine, a static component generator.")
+    # Create the top-level parser
+    parser = argparse.ArgumentParser(prog='geri')
+    subparsers = parser.add_subparsers(dest='command', help='commands')
 
-    # Add arguments
-    parser.add_argument("-i", "--info", help="Show install location", action="store_true")
-    parser.add_argument("-p", "--plugins", help="List available plugins", action="store_true")
-    parser.add_argument("-n", "--init", help="Create source directory for geraldine templates.", action="store_true")
+    # Create a subparser for the 'info' command
+    info_parser = subparsers.add_parser('info', help='Show install location')
 
-    # Parse arguments
+    # Create a subparser for the 'init' command
+    init_parser = subparsers.add_parser('init', help='Create source directory for geraldine templates.')
+
+      # Create a subparser for the 'init' command
+    watch_parser = subparsers.add_parser('watch', help='Watch geraldine source folder and rebuild changes.')
+
+
+    # Create a subparser for the 'serve' command
+    serve_parser = subparsers.add_parser('serve', help='Start simple web development server in current directory.')
+    serve_parser.add_argument("port", nargs='?', type=int, default=8000, help="Specify the port on which to run the server. Default is 8000.")
+
+    # Parse the arguments
     args = parser.parse_args()
 
-    # Execute based on arguments
-    if args.info:
+    # Execute based on the command
+    if args.command == 'info':
+        print("Setup info")
         for key,value in primary.get_info().items():
             print(f"{key}: {value}")
-        exit()
-    if args.plugins:
         print("Available plugins:")
         for item in primary.list_plugins():
             print(item) 
         exit()
-    if args.init:
+    elif args.command == 'init':
         print(f"Creating source folder: {primary.source_dir}")
         primary.create_geri_src()
         exit()
-        
+    elif args.command == 'serve':
+        port = args.port
+        util.start_simple_server(port) 
+        exit()
+    elif args.command == 'watch':
+        MyHandler = util.get_watcher_handler(source_dir)
+        util.watcher(source_dir, MyHandler)  
+        exit()
+
     primary.run()
     print("Build Completed Successfully")
 
