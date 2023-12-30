@@ -178,7 +178,7 @@ def clear_directory(directory):
         elif os.path.isdir(item_path):
             # It's a directory - delete it and all its contents
             shutil.rmtree(item_path)
-            
+
 def replace_path_base(original_path, source_dir, destination_dir):
     # Remove the source directory from the original path
     relative_path = os.path.relpath(original_path, source_dir)
@@ -273,6 +273,7 @@ def get_watcher_handler(source_dir):
                     return
                 if event.event_type == "closed":
                     return
+                print()
                 print(event)
                 self.run()
     return MyHandler
