@@ -48,6 +48,7 @@ def run():
         util.start_simple_server(port, dest_dir) 
         exit()
     elif args.command == 'watch':
+        util.run_command('geri', source_dir)
         MyHandler = util.get_watcher_handler(source_dir)
         util.watcher(source_dir, MyHandler)  
         exit()

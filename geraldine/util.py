@@ -246,12 +246,19 @@ def start_simple_server(port=8000, directory=None):
         # Start serving requests
         httpd.serve_forever()
 
+def run_command(command, source_dir):
+    directory = os.path.dirname(source_dir)
+    result = subprocess.run(command, shell=True, cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if result.returncode == 0:
+        print(f"{result.stdout}")
+    else:
+        print(f"Error in executing command:\n{result.stderr}")
 
 def get_watcher_handler(source_dir):
     class MyHandler(FileSystemEventHandler):
             def __init__(self):
                 self.last_handled_time = 0
-                self.delay = 1
+                self.delay = .1
             def should_handle_event(self):
                 current_time = time.time()
                 if current_time - self.last_handled_time > self.delay:
