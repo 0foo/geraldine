@@ -34,10 +34,10 @@ def run():
     if args.command == 'info':
         print("Setup info")
         for key,value in primary.get_info().items():
-            print(f"{key}: {value}")
+            print(f"\t{key}: {value}")
         print("Available plugins:")
         for item in primary.list_plugins():
-            print(item) 
+            print(f"\t{item}") 
         exit()
     elif args.command == 'init':
         print(f"Creating source folder: {primary.source_dir}")

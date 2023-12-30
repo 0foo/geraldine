@@ -60,29 +60,28 @@ json_path: /somedir/data/myjson.json
 
 ## CLI
 ```bash
-geri
-    Build Completed Successfully
+usage: geri [-h] {info,init,watch,serve} ...
 
-geri -h
-    usage: geri [-h] [-i] [-p]
+positional arguments:
+  {info,init,watch,serve}
+                        commands
+    info                Show install location
+    init                Create source directory for geraldine templates.
+    watch               Watch geraldine source folder and rebuild on change.
+    serve               Start simple web development server in current directory.
 
-    Geraldine, a static component generator.
-
-    options:
-    -h, --help     show this help message and exit
-    -i, --info     Show install location
-    -p, --plugins  List available plugins
+options:
+  -h, --help            show this help message and exit
 
 
-geri --plugins
+geri info
+    Setup info
+        install location: /home/nick/.local/lib/python3.10/site-packages/geraldine
+        plugin path: /home/nick/.local/lib/python3.10/site-packages/geraldine/plugins
     Available plugins:
-    jinja_parser.plugin.py
-    jinja_file_parser.plugin.py
-
-geri --info
-    install location: /home/nick/Projects/in_prog/geraldine/geraldine
-    plugin path: /home/nick/Projects/in_prog/geraldine/geraldine/plugins
-
+        simple_processor.plugin.py
+        jinja_parser.plugin.py
+        jinja_file_parser.plugin.py
 ```
 
 
