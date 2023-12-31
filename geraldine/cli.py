@@ -49,16 +49,18 @@ def run():
         exit()
     elif args.command == 'watch':
         # this is file watcher functionality that rewrites the directory when the file is change
+
         try:
-            util.run_command('geri', source_dir)
+            primary.run()
         except:
             exit()
+
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
-                    util.run_command('geri', source_dir)
+                    primary.run()
         except KeyboardInterrupt:
             print("Stopping Watcher")
 
