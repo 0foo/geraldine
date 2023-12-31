@@ -10,6 +10,18 @@ import traceback
 
 source_dir = primary.source_dir
 dest_dir = primary.destination_dir_name
+lockfile_path = "/tmp/.geriwatch"
+
+def run_primary():
+    try:
+        primary.run()
+    except FileNotFoundError as e:
+        print("File not found: ")
+    except Exception as e:
+        raise(e)
+    finally:
+        util.delete_file(lockfile_path)
+
 
 def run():
     # Create the top-level parser
@@ -70,10 +82,6 @@ def run():
 
     # watch  
     elif args.command == 'watch':
-
-        cwd=os.getcwd()
-        lockfile_path = os.path.join(cwd, "geri-watching.lock")
-
         if util.file_exists(lockfile_path):
             print(f"Watcher lockfile exists, exiting: {lockfile_path}")
             exit(1)
@@ -83,31 +91,22 @@ def run():
         
         util.write_file(lockfile_path, "running")
 
-        try:
-            primary.run()
-        except Exception as e:
-            util.delete_file(lockfile_path)
-            raise(e)
+        run_primary()
+
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
-                    try:
-                        primary.run()
-                    except Exception as e:
-                        traceback.print_exc()  # This prints the full traceback
+                    run_primary()
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
         util.delete_file(lockfile_path)
         exit()
 
-    try:
-        primary.run()
-    except Exception as e:
-        raise(e)
+    run_primary()
 
 
 if __name__ == "__main__":

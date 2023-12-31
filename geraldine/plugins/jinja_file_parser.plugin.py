@@ -7,6 +7,13 @@ environment = jinja2.Environment()
 
 remove_extensions=['jinja']
 
+class FileNotFoundException(Exception):
+    """Exception raised when a file is not found."""
+
+    def __init__(self, message="file not found"):
+        self.message = message
+        super().__init__(self.message)
+
 
 def geraldine(in_data):
     frontmatter = in_data["frontmatter"]
@@ -17,7 +24,7 @@ def geraldine(in_data):
         json_file_path = util.find_file(template_dir, json_path) # the json file
     except Exception as e:
         print(f"Cant find json data in front matter of: {source_path}")
-        exit()
+        raise(e)
 
     filename_key = frontmatter["filename_key"]
     content = in_data["template_content_string"]

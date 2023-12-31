@@ -211,13 +211,12 @@ def find_file(base_path, file_path):
         file_path = os.path.join(base_path, file_path)
     else:
         return file_path
-
     # Check if the file exists
     if os.path.exists(file_path):
         return file_path
     else:
-        raise Exception("File path: " + file_path + " doesn't exist. ")
-
+        raise FileNotFoundError(f"File path: {file_path} doesn't exist.")
+    
 def is_int(key):
     try:
         int(key)
