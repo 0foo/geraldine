@@ -61,7 +61,10 @@ def run():
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
-                    primary.run()
+                    try:
+                        primary.run()
+                    except Exception as e:
+                        print(e)
         except KeyboardInterrupt:
             print("Stopping Watcher")
 
