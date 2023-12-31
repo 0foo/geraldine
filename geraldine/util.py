@@ -258,7 +258,7 @@ def get_watcher_handler(source_dir):
     class MyHandler(FileSystemEventHandler):
             def __init__(self):
                 self.last_handled_time = 0
-                self.delay = .1
+                self.delay = .5
             def should_handle_event(self):
                 current_time = time.time()
                 if current_time - self.last_handled_time > self.delay:
