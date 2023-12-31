@@ -80,32 +80,20 @@ def run():
             print(f"Watcher lockfile exists, exiting: {lockfile_path}")
             exit(1)
             
-
         if not os.path.exists(source_dir):
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-
-
-        try:
-            primary.run()
-        except Exception as e:
-            print(e)
-            print("Exiting")
-            sys.exit(1)
-
+        primary.run()
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
-                    try:
-                        primary.run()
-                    except Exception as e:
-                        print(e)
+                    primary.run()
         except KeyboardInterrupt:
             print("\nStopping Watcher")
-
+        util.delete_file(lockfile_path, "running")
         exit()
 
     try:

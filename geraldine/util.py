@@ -141,7 +141,7 @@ def create_dir(dir, gitkeep=False):
         file = open(dir + "/.gitkeep", 'w')
         file.write('')
         file.close()
-        
+
 def write_file(file_path, content):
     """Write content to a file specified by file_path."""
     with open(file_path, 'w') as file:
@@ -150,6 +150,21 @@ def write_file(file_path, content):
 def file_exists(file_path):
     """Check if a file exists at the given file_path."""
     return os.path.exists(file_path)
+
+def delete_file(file_path):
+    try:
+        os.remove(file_path)
+        print(f"File {file_path} successfully deleted.")
+        return True
+    except FileNotFoundError:
+        print(f"No such file: {file_path}")
+        return False
+    except PermissionError:
+        print(f"Permission denied: Unable to delete {file_path}")
+        return False
+    except Exception as e:
+        print(f"Error deleting file {file_path}: {e}")
+        return False
 
 def depth_first_dir_walk(path, max_depth=20, current_depth=0):
     """ walk the directory tree in a depth first fashion with a max_depth limit """
