@@ -16,6 +16,8 @@ def geraldine(processor_data):
     destination_path = processor_data["destination_path"]
     source_template_dir = os.path.dirname(template_path)
     compiled_template_dir = os.path.dirname(destination_path)
+    root_path = frontmatter["project_root_path"]
+    destination_root_path = os.path.join(root_path, frontmatter["destination_dir_name"])
     json_data = {}
 
     if "start_key" in frontmatter:
@@ -42,7 +44,7 @@ def geraldine(processor_data):
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
-        FileSystemLoader(compiled_template_dir)
+        FileSystemLoader(destination_root_path)
     ]))
     template = env.get_template('the_template')
     out =  template.render(json_data)

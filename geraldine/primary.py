@@ -13,6 +13,7 @@ priority_directories=[
 ]
 
 cwd = os.getcwd()
+root_dir = cwd
 source_dir =  os.path.join(cwd, source_dir_name)
 destination_dir = os.path.join(cwd, destination_dir_name)
 
@@ -110,7 +111,10 @@ def process(in_dir):
                         "template_content_string" : content,
                         "src_path" : location.path,
                         "destination_path": new_path,
-                        "template_filename": name
+                        "project_root_path": root_dir,
+                        "template_filename": name,
+                        "source_dir_name": source_dir_name,
+                        "destination_dir_name": destination_dir_name
                     }
 
                     content = the_processor.geraldine(processor_data)
