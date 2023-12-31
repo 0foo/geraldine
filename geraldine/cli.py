@@ -68,6 +68,7 @@ def run():
             print("Stopping Server")
             if the_server is not None:
                 the_server.stop_server()
+            exit()
         
     elif args.command == 'watch':
         try:
