@@ -268,10 +268,10 @@ def start_simple_server(port=8000, directory=None):
 
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
-        # def server_bind(self):
-        #     # Set SO_LINGER to false and 0 timeout
-        #     self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
-        #     super().server_bind()
+        def server_bind(self):
+            # Set SO_LINGER to false and 0 timeout
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
+            super().server_bind()
 
     if directory:
         os.chdir(directory)
