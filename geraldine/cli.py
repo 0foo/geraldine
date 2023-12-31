@@ -18,10 +18,9 @@ def run_primary():
     except FileNotFoundError as e:
         print(e)
     except Exception as e:
-        raise(e)
-    finally:
         if util.file_exists(lockfile_path):
             util.delete_file(lockfile_path)
+        raise(e)
 
 def run():
     # Create the top-level parser
@@ -90,7 +89,7 @@ def run():
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-        print(f"Created watcher lockfile at: {lockfile_path}")
+        print(f"Watcher lockfile created: {lockfile_path}")
         run_primary()
 
 
@@ -100,11 +99,12 @@ def run():
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
                     run_primary()
-                    print("\n\n")
+                    print("\n")
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
         util.delete_file(lockfile_path)
+        print(f"Watcher lockfile deleted: {lockfile_path}")
         exit()
 
     run_primary()
