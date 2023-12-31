@@ -24,9 +24,9 @@ modules={}
 def get_info():
     return {
         "install location" : script_dir,
-        "plugin path" : plugin_path 
+        "plugin path" : plugin_path,
+        "destination dir" : destination_dir
     }
-    destination_dir = os.path.dirname(in_dir)
 
 
 def list_plugins():
@@ -47,14 +47,12 @@ def load_modules():
 def run():  
     if not os.path.exists(source_dir):
         raise Exception(f"Can't find source directory: {source_dir}")
-        exit()
 
     load_modules()
-    try:
-        util.create_dir(destination_dir)
-        util.clear_directory(destination_dir)
-    except:
-        pass
+
+    util.create_dir(destination_dir)
+    util.clear_directory(destination_dir)
+
 
     for dir_item in priority_directories:
         the_dir = os.path.join(source_dir, dir_item)
@@ -87,10 +85,7 @@ def process(in_dir):
         # is file
         if location.is_file():
             if util.is_image(location.path):
-                try:
-                    util.copy_path(location.path, new_path)
-                except:
-                    pass
+                util.copy_path(location.path, new_path)
                 continue
 
             post = util.get_front_matter(location.path)
