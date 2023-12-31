@@ -89,7 +89,6 @@ def run():
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-        print("\n\n")
         run_primary()
 
 
@@ -99,6 +98,7 @@ def run():
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
                     run_primary()
+                    print("\n\n")
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
