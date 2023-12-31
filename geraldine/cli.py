@@ -44,15 +44,30 @@ def run():
         print(f"Creating source folder: {primary.source_dir}")
         primary.create_geri_src()
         exit()
+    # elif args.command == 'serve':
+    #     try:
+    #         port = args.port
+    #         the_server = util.get_simple_server(source_dir, port)
+    #         the_server.start_server()
+    #     except KeyboardInterrupt:
+    #         print("Stopping Server")
+    #         the_server.stop_server()
+    #     exit()
     elif args.command == 'serve':
+        the_server = None  # Define the_server in the broader scope
         try:
             port = args.port
             the_server = util.get_simple_server(source_dir, port)
             the_server.start_server()
+
+            # Keep the main thread alive or perform other tasks here
+            while the_server.is_running:
+                time.sleep(1)
+
         except KeyboardInterrupt:
             print("Stopping Server")
-            the_server.stop_server()
-        exit()
+            if the_server is not None:
+                the_server.stop_server()
         
     elif args.command == 'watch':
         try:
