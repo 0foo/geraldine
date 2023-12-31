@@ -348,6 +348,7 @@ def get_simple_server(directory, port=8000):
     import socketserver
     import threading
     import os
+    import requests
 
     class SimpleServer:
         def __init__(self, port, directory=None):
@@ -380,6 +381,19 @@ def get_simple_server(directory, port=8000):
 
         def stop_server(self):
             self.is_running = False
+            self.httpd.server_close()
+            self.thread.join()
+            print("Server stopped.")
+            
+        def stop_server(self):
+            self.is_running = False
+
+            # Send a dummy request to the server to unblock handle_request
+            try:
+                requests.get(f"http://localhost:{self.port}")
+            except requests.RequestException:
+                pass  # Ignore request errors, as the server might close before handling it
+
             self.httpd.server_close()
             self.thread.join()
             print("Server stopped.")
