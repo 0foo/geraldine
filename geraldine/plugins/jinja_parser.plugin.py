@@ -21,14 +21,23 @@ def geraldine(processor_data):
     if "start_key" in frontmatter:
         start_key_list = frontmatter["start_key"].split(".")
     else:
-         start_key_list = []
+        start_key_list = []
 
     if "json_path" in frontmatter:
         json_path = frontmatter["json_path"]
-        json_file_path = util.find_file(source_template_dir, json_path)
+
+        try:
+            json_file_path = util.find_file(source_template_dir, json_path)
+        except Exception as e:
+            print(f"Cant find json data in front matter of: {template_path}")
+            raise e
+        
         with open(json_file_path, "r") as f:
             json_data = json.load(f)
+
         json_data = util.dict_lookup_function(json_data, start_key_list)
+    
+    print(json_data)
 
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
@@ -36,4 +45,5 @@ def geraldine(processor_data):
     ]))
 
     template = env.get_template('the_template')
+    print()
     return  template.render(json_data)
