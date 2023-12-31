@@ -112,6 +112,7 @@ def get_front_matter(file_path):
 
     massage_metadata=metadata.replace('\t', ' ' * 4) # yaml hates tabs
     massage_metadata=yaml.safe_load(massage_metadata)
+    print(massage_metadata)
 
     return DictToObject({
         "metadata":massage_metadata,
