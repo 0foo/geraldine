@@ -39,10 +39,11 @@ def geraldine(processor_data):
             json_data = json.load(f)
 
         json_data = util.dict_lookup_function(json_data, start_key_list)
-        print(type(json_data))
-        # json_data = json.loads(json_data)
-    # print(content)
-    # print(destination_root_path)
+    
+    
+        if isinstance(json_data, list):
+            json_data = {"data": json_data}
+            print("Your data was pointing to a list, and jinja requires a dict to render, so wrapped it in an dict under the key: \"data\"")
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
