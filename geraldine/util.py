@@ -215,7 +215,7 @@ def find_file(base_path, file_path):
     if os.path.exists(file_path):
         return file_path
     else:
-        raise FileNotFoundError(f"File path: {file_path} doesn't exist.")
+        raise FileNotFoundError(f"File path does not exists: {file_path}")
     
 def is_int(key):
     try:
