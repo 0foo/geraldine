@@ -241,25 +241,25 @@ def dict_lookup_function(input_dict, lookup_list):
     return current_dict
 
 
-def start_simple_server(port=8000, directory=None):
-    import http.server
-    import socketserver
+# def start_simple_server(port=8000, directory=None):
+#     import http.server
+#     import socketserver
 
 
-    if directory:
-        os.chdir(directory)
+#     if directory:
+#         os.chdir(directory)
  
-    directory = os.getcwd()
+#     directory = os.getcwd()
 
-    # Create an HTTP request handler
-    handler = http.server.SimpleHTTPRequestHandler
+#     # Create an HTTP request handler
+#     handler = http.server.SimpleHTTPRequestHandler
 
-    # Create the HTTP server
-    with socketserver.TCPServer(("", port), handler) as httpd:
-        print(f"\nServing from directory root: {directory}")
-        print(f"Starting HTTP server at http://localhost:{port}")
-        # Start serving requests
-        httpd.serve_forever()
+#     # Create the HTTP server
+#     with socketserver.TCPServer(("", port), handler) as httpd:
+#         print(f"\nServing from directory root: {directory}")
+#         print(f"Starting HTTP server at http://localhost:{port}")
+#         # Start serving requests
+#         httpd.serve_forever()
 
 
 def start_simple_server(port=8000, directory=None):
@@ -268,6 +268,10 @@ def start_simple_server(port=8000, directory=None):
 
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
+        # def server_bind(self):
+        #     # Set SO_LINGER to false and 0 timeout
+        #     self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
+        #     super().server_bind()
 
     if directory:
         os.chdir(directory)
