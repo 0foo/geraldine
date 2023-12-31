@@ -51,7 +51,7 @@ def run():
 
     load_modules()
     util.create_dir(destination_dir)
-    
+
     try:
         util.clear_directory(destination_dir)
     except:
@@ -71,7 +71,6 @@ def process(in_dir):
         name = location.name
         old_path = util.remove_subpath(location.path, source_dir)
         new_path = os.path.join(destination_dir, old_path)
-        print(new_path)
 
         if name == destination_dir_name:
             continue
