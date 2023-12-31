@@ -84,7 +84,13 @@ def run():
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-        primary.run()
+        
+        try:
+            primary.run()
+        except Exception as e:
+            util.delete_file(lockfile_path, "running")
+            print(e)
+
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
             while True:
