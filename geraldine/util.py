@@ -310,3 +310,11 @@ def watcher(directory_to_watch, file_system_event_handler):
 
     watcher = DirectoryWatcher(directory_to_watch)
     watcher.run()
+
+def is_image(filename):
+    from PIL import Image
+    try:
+        Image.open(filename)
+        return True
+    except IOError:
+        return False

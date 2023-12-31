@@ -81,6 +81,9 @@ def process(in_dir):
 
         # is file
         if location.is_file():
+            if util.is_image(location.path):
+                continue
+            
             post = util.get_front_matter(full_path)
 
             if not post.metadata:
