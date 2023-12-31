@@ -84,12 +84,12 @@ def run():
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-        
+
         try:
             primary.run()
         except Exception as e:
             util.delete_file(lockfile_path, "running")
-            print(e)
+            raise(e)
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
@@ -99,7 +99,7 @@ def run():
                     try:
                         primary.run()
                     except Exception as e:
-                        print(e)
+                        raise(e)
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
@@ -109,7 +109,7 @@ def run():
     try:
         primary.run()
     except Exception as e:
-        print(e)
+        raise(e)
 
 
 if __name__ == "__main__":
