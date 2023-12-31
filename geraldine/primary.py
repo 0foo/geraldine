@@ -130,8 +130,7 @@ def process(in_dir):
                     print(processor + " module not found in: " + location.path)
 
             if content:
-                with open(new_path, "w") as new_f:
-                    new_f.write(content)
+                util.write_file_with_dir(new_path, content)
             continue
 
         print(f"Couldn't identify node type for: {location.path}")

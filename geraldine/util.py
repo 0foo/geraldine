@@ -361,3 +361,15 @@ def copy_path(src, dst):
 
     shutil.copy2(src, dst)
  
+
+def write_file_with_dir(file_path, content):
+    from pathlib import Path
+    # Convert the file path to a Path object for easier handling
+    path = Path(file_path)
+
+    # Create the directory if it does not exist
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Write the content to the file
+    with open(path, 'w') as file:
+        file.write(content)
