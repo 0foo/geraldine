@@ -65,9 +65,8 @@ def run():
 def process(in_dir):
     for location in util.depth_first_dir_walk(in_dir, max_depth=max_depth):
         name = location.name
-        extension = pathlib.Path(location.path).suffix
         full_path = location.path
-        new_path = util.remove_subpath(in_dir, source_dir)
+        new_path = util.remove_subpath(full_path, source_dir)
         new_path = os.path.join(destination_dir, new_path)
 
         if name == destination_dir_name:
