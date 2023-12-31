@@ -50,9 +50,9 @@ def run():
     elif args.command == 'watch':
         # this is file watcher functionality that rewrites the directory when the file is change
         util.run_command('geri', source_dir)
+        print(f"Watching directory: {source_dir}")
         while True:
-            print(f"Watching directory: {source_dir}")
-            directory_changed = util.has_directory_changed(source_dir, 1)
+            directory_changed = util.has_directory_changed(source_dir, 2)
             if directory_changed:
                 util.run_command('geri', source_dir)
         exit()
