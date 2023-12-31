@@ -285,7 +285,7 @@ def watcher(directory_to_watch, file_system_event_handler):
     from watchdog.observers import Observer
 
     class DirectoryWatcher:
-        def __init__(self, directory_to_watch):
+        def __init__(selfh):
             self.observer = Observer()
 
         def run_once(self):
