@@ -294,7 +294,7 @@ def watcher(directory_to_watch, file_system_event_handler):
         def run_once(self):
             self.observer.schedule(file_system_event_handler(self.observer), directory_to_watch, recursive=True)
             self.observer.start()
-            print(f"Started watching directory: {directory_to_watch}. Waiting for a single event.")
+            # print(f"Started watching directory: {directory_to_watch}. Waiting for a single event.")
             try:
                 while True:
                     time.sleep(1)

@@ -3,7 +3,7 @@ import argparse
 from geraldine import primary
 from pprint import pprint
 from geraldine import util
-
+import time
 
 source_dir = primary.source_dir
 dest_dir = primary.destination_dir_name
@@ -51,8 +51,11 @@ def run():
 
         # this is file watcher functionality that rewrites the directory when the file is change
         util.run_command('geri', source_dir)
-        MyHandler = util.get_watcher_handler(source_dir)
-        util.watcher(source_dir, MyHandler)  
+        while True:
+            print(f"Started watching directory: {source_dir}. Waiting for a single event.")
+            MyHandler = util.get_watcher_handler(source_dir)
+            util.watcher(source_dir, MyHandler)  
+            time.sleep(1)
         exit()
 
     primary.run()
