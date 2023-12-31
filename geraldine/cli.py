@@ -16,12 +16,11 @@ def run_primary():
     try:
         primary.run()
     except FileNotFoundError as e:
-        print("File not found: ")
+        print(e)
     except Exception as e:
         raise(e)
     finally:
         util.delete_file(lockfile_path)
-
 
 def run():
     # Create the top-level parser
