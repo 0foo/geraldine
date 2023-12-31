@@ -16,7 +16,7 @@ def geraldine(processor_data):
     destination_path = processor_data["destination_path"]
     source_template_dir = os.path.dirname(template_path)
     compiled_template_dir = os.path.dirname(destination_path)
-    json_data = {}
+    json_data = {"n/a":"n/a"}
 
     if "start_key" in frontmatter:
         start_key_list = frontmatter["start_key"].split(".")
