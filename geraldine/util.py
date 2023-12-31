@@ -247,10 +247,9 @@ def start_simple_server(port=8000, directory=None):
 
 
     if directory:
-        os.chdir(directory)
-    
-
-    directory = os.getcwd()
+        directory = os.chdir(directory)
+    else:
+        directory = os.getcwd()
 
     # Create an HTTP request handler
     handler = http.server.SimpleHTTPRequestHandler
