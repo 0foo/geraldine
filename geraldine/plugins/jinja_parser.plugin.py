@@ -37,14 +37,14 @@ def geraldine(processor_data):
 
         json_data = util.dict_lookup_function(json_data, start_key_list)
     
-
+    print(content)
+    print(compiled_template_dir)
+    
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
         FileSystemLoader(compiled_template_dir)
     ]))
-
     template = env.get_template('the_template')
-
-    out =   template.render(json_data)
+    out =  template.render(json_data)
     print(out)
     return out
