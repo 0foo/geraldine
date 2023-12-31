@@ -41,7 +41,7 @@ def geraldine(processor_data):
         json_data = util.dict_lookup_function(json_data, start_key_list)
     
     print(content)
-    print(compiled_template_dir)
+    print(destination_root_path)
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
