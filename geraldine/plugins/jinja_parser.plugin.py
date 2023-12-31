@@ -13,7 +13,9 @@ def geraldine(processor_data):
     frontmatter = processor_data["frontmatter"]
     template_path = processor_data["src_path"]
     content = processor_data["template_content_string"]
-    template_dir = os.path.dirname(template_path)
+    destination_path = property["destination_path"]
+    source_template_dir = os.path.dirname(template_path)
+    compiled_template_dir = os.path.dirname(destination_path)
     json_data = {}
 
     if "start_key" in frontmatter:
@@ -23,14 +25,14 @@ def geraldine(processor_data):
 
     if "json_path" in frontmatter:
         json_path = frontmatter["json_path"]
-        json_file_path = util.find_file(template_dir, json_path)
+        json_file_path = util.find_file(source_template_dir, json_path)
         with open(json_file_path, "r") as f:
             json_data = json.load(f)
         json_data = util.dict_lookup_function(json_data, start_key_list)
 
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
-        FileSystemLoader(template_dir)
+        FileSystemLoader(compiled_template_dir)
     ]))
 
     template = env.get_template('the_template')
