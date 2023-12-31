@@ -304,7 +304,7 @@ def watcher(directory_to_watch, file_system_event_handler):
                 self.observer.stop()
                 self.observer.join()
     watcher = DirectoryWatcher(directory_to_watch)
-    watcher.run()
+    watcher.run_once()
     
 
 def is_image(filename):
