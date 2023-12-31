@@ -20,11 +20,13 @@ def add_indent_to_front(text, spaces_count=4):
 def geraldine(processor_data):
     frontmatter = processor_data["frontmatter"]
     content = processor_data["template_content_string"]
+
     if "indent_count" in frontmatter:
         indent_count = frontmatter["indent_count"]
     else:
         indent_count=4
-
+    print(indent_count)
+    
     return add_indent_to_front(content, indent_count)
 
     
