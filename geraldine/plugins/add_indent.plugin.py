@@ -25,7 +25,6 @@ def geraldine(processor_data):
         indent_count = frontmatter["indent_count"]
     else:
         indent_count=4
-    print(indent_count)
     
     return add_indent_to_front(content, indent_count)
 
