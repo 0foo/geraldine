@@ -33,6 +33,7 @@ def geraldine(processor_data):
             json_file_path = util.find_file(source_template_dir, json_path)
         except Exception as e:
             print(f"Cant find json data in front matter of: {template_path}")
+            print(f"{json_path}")
             exit()
         
         with open(json_file_path, "r") as f:
