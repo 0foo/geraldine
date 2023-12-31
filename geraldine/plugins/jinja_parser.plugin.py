@@ -13,7 +13,7 @@ def geraldine(processor_data):
     frontmatter = processor_data["frontmatter"]
     template_path = processor_data["src_path"]
     content = processor_data["template_content_string"]
-    destination_path = property["destination_path"]
+    destination_path = processor_data["destination_path"]
     source_template_dir = os.path.dirname(template_path)
     compiled_template_dir = os.path.dirname(destination_path)
     json_data = {}
