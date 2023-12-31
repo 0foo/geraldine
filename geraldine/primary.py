@@ -60,9 +60,10 @@ def run():
         the_dir = os.path.join(source_dir, dir_item)
         if os.path.exists(the_dir):
             process(the_dir)
-            print(f"Priority directory processed: {the_dir}")
+            print(f"Priority directory built: {the_dir}")
 
     process(source_dir)
+    print(f"Source directory built: {source_dir}")
 
 
 def process(in_dir):
