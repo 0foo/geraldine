@@ -109,10 +109,10 @@ def get_front_matter(file_path):
       
         if lines_encountered == 2:
             content += the_line
-
+    
+    print(metadata)
     massage_metadata=metadata.replace('\t', ' ' * 4) # yaml hates tabs
     massage_metadata=yaml.safe_load(massage_metadata)
-    print(massage_metadata)
 
     return DictToObject({
         "metadata":massage_metadata,
