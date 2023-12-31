@@ -50,9 +50,8 @@ def run():
         exit()
 
     load_modules()
-    util.create_dir(destination_dir)
-
     try:
+        util.create_dir(destination_dir)
         util.clear_directory(destination_dir)
     except:
         pass
