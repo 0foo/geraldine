@@ -86,7 +86,10 @@ def process(in_dir):
         # is file
         if location.is_file():
             if util.is_image(location.path):
-                util.copy_path(location.path, new_path)
+                try:
+                    util.copy_path(location.path, new_path)
+                except:
+                    pass
                 continue
 
             post = util.get_front_matter(location.path)
