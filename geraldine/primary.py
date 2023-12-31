@@ -107,7 +107,7 @@ def process(in_dir):
                     processor_data = {
                         "frontmatter":frontmatter,
                         "template_content" : content,
-                        "src_path" : full_path,
+                        "src_path" : location.path,
                         "destination_path": new_path,
                         "template_filename": name
                     }
@@ -122,7 +122,7 @@ def process(in_dir):
                             new_path = util.remove_extension_from_path(new_path, remove_extension)
                     # post processing end
                 else:
-                    print(processor + " module not found in: " + full_path)
+                    print(processor + " module not found in: " + location.path)
 
             if content:
                 with open(new_path, "w") as new_f:
