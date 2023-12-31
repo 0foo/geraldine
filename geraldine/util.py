@@ -261,32 +261,54 @@ def dict_lookup_function(input_dict, lookup_list):
 #         # Start serving requests
 #         httpd.serve_forever()
 
-
 def start_simple_server(port=8000, directory=None):
     import http.server
     import socketserver
-
+    
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
-        def server_bind(self):
-            # Set SO_LINGER to false and 0 timeout
-            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
-            super().server_bind()
 
     if directory:
         os.chdir(directory)
-    
+ 
     directory = os.getcwd()
+
 
     # Create an HTTP request handler
     handler = http.server.SimpleHTTPRequestHandler
 
-    # Create the HTTP server
+    # Create the HTTP server with ReusableTCPServer
     with ReusableTCPServer(("", port), handler) as httpd:
-        print(f"\nServing from directory root: {directory}")
+        print(f"\nServing from directory root: {os.getcwd()}")
         print(f"Starting HTTP server at http://localhost:{port}")
-        # Start serving requests
         httpd.serve_forever()
+
+
+# def start_simple_server(port=8000, directory=None):
+#     import http.server
+#     import socketserver
+
+#     class ReusableTCPServer(socketserver.TCPServer):
+#         allow_reuse_address = True
+#         def server_bind(self):
+#             # Set SO_LINGER to false and 0 timeout
+#             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
+#             super().server_bind()
+
+#     if directory:
+#         os.chdir(directory)
+    
+#     directory = os.getcwd()
+
+#     # Create an HTTP request handler
+#     handler = http.server.SimpleHTTPRequestHandler
+
+#     # Create the HTTP server
+#     with ReusableTCPServer(("", port), handler) as httpd:
+#         print(f"\nServing from directory root: {directory}")
+#         print(f"Starting HTTP server at http://localhost:{port}")
+#         # Start serving requests
+#         httpd.serve_forever()
 
 
 def run_command(command, source_dir):
