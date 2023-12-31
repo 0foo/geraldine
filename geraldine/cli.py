@@ -67,8 +67,10 @@ def run():
 
         exit()
 
-    primary.run()
-    print("Build Completed Successfully")
+    try:
+        primary.run()
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":
