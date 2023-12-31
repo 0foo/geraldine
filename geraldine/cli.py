@@ -48,14 +48,13 @@ def run():
         util.start_simple_server(port, dest_dir) 
         exit()
     elif args.command == 'watch':
-
         # this is file watcher functionality that rewrites the directory when the file is change
         util.run_command('geri', source_dir)
         while True:
-            print(f"Started watching directory: {source_dir}. Waiting for a single event.")
-            MyHandler = util.get_watcher_handler(source_dir)
-            util.watcher(source_dir, MyHandler)  
-            time.sleep(1)
+            print(f"Watching directory: {source_dir}")
+            directory_changed = util.has_directory_changed(source_dir, 1)
+            if directory_changed:
+                util.run_command('geri', source_dir)
         exit()
 
     primary.run()

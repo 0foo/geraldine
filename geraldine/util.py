@@ -369,3 +369,30 @@ def write_file_with_dir(file_path, content):
     # Write the content to the file
     with open(path, 'w') as file:
         file.write(content)
+
+
+def has_directory_changed(directory, n_seconds):
+    """
+    Checks if any file or directory in the specified directory has been
+    created, modified, or deleted in the past n seconds.
+
+    :param directory: Path to the directory to scan.
+    :param n_seconds: Time interval in seconds.
+    :return: True if any change is detected, False otherwise.
+    """
+    def get_directory_state(directory):
+        state = {}
+        for root, dirs, files in os.walk(directory):
+            for name in files + dirs:
+                path = os.path.join(root, name)
+                state[path] = os.path.getmtime(path)
+        return state
+
+    initial_state = get_directory_state(directory)
+    time.sleep(n_seconds)
+    new_state = get_directory_state(directory)
+
+    if initial_state != new_state:
+        return True
+    return False
+
