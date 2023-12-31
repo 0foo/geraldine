@@ -261,7 +261,6 @@ def get_watcher_handler(source_dir):
     class MyEventHandler(FileSystemEventHandler):
         def __init__(self, observer):
             self.observer = observer
-        
         def run(self):
             command = "geri"
             directory = os.path.dirname(source_dir)
@@ -288,11 +287,9 @@ def watcher(directory_to_watch, file_system_event_handler):
     class DirectoryWatcher:
         def __init__(self, directory_to_watch):
             self.observer = Observer()
-            self.directory_to_watch = directory_to_watch
-            self.event_handler = file_system_event_handler(self.observer)
 
         def run_once(self):
-            self.observer.schedule(self.event_handler, self.directory_to_watch, recursive=True)
+            self.observer.schedule(file_system_event_handler(self.observer), self.directory_to_watch, recursive=True)
             self.observer.start()
             print(f"Started watching directory: {self.directory_to_watch}. Waiting for a single event.")
             try:
