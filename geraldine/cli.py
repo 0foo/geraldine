@@ -48,11 +48,10 @@ def run():
         util.start_simple_server(port, dest_dir) 
         exit()
     elif args.command == 'watch':
-        # this is file watcher functionality that rewrites the directory when the file is change
-
         try:
             primary.run()
-        except:
+        except Exception as e:
+            print(e)
             exit()
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
