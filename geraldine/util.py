@@ -275,7 +275,10 @@ def get_watcher_handler(source_dir):
                 return
             if event.event_type == "closed":
                 return
-            self.run()
+            try:
+                self.run()
+            except Exception as e:
+                print(e)
             self.observer.stop()  # Stop after the first event
     return MyEventHandler
     
