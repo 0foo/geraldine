@@ -84,13 +84,13 @@ def process(in_dir):
         # is file
         if location.is_file():
             if util.is_image(location.path):
-                shutil.copy(location.path, new_path)
+                util.copy_path(location.path, new_path)
                 continue
 
             post = util.get_front_matter(location.path)
 
             if not post.metadata:
-                shutil.copy(location.path, new_path)
+                util.copy_path(location.path, new_path)
                 continue
 
             frontmatter=post.metadata

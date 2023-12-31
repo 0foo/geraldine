@@ -346,3 +346,24 @@ def remove_subpath(original_path, subpath_to_remove):
 
     # Construct and return the new path
     return Path(*parts)
+
+
+def copy_path(src, dst, follow_symlinks=False):
+    # Check if the source is a directory
+    if os.path.isdir(src) and not os.path.islink(src):
+        # Copy a directory (including symlinks)
+        shutil.copytree(src, dst, symlinks=not follow_symlinks, copy_function=shutil.copy2)
+    else:
+        # Ensure the destination directory exists
+        dst_dir = os.path.dirname(dst)
+        if not os.path.exists(dst_dir):
+            os.makedirs(dst_dir)
+
+        # Copy a file or a symlink
+        if follow_symlinks or not os.path.islink(src):
+            # Follow the symlink or just copy the file
+            shutil.copy2(src, dst)
+        else:
+            # Copy the symlink itself
+            link_target = os.readlink(src)
+            os.symlink(link_target, dst)
