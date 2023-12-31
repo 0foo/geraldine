@@ -8,6 +8,3 @@ pip3 install ./dist/geraldine-0.1.0-py3-none-any.whl
 git add .
 git commit -m "update"
 git push
-jobs -p | xargs kill -9
-geri watch &
-geri serve &

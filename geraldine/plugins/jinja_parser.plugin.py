@@ -2,6 +2,7 @@ import jinja2
 import json
 import os
 from geraldine import util
+from jinja2 import Environment, ChoiceLoader, FileSystemLoader, DictLoader
 
 environment = jinja2.Environment()
 
@@ -27,5 +28,10 @@ def geraldine(processor_data):
             json_data = json.load(f)
         json_data = util.dict_lookup_function(json_data, start_key_list)
 
-    template = environment.from_string(content)
+    env = Environment(loader=ChoiceLoader([
+        DictLoader({'the_template': content}),
+        FileSystemLoader(template_dir)
+    ]))
+
+    template = env.get_template('the_template')
     return  template.render(json_data)
