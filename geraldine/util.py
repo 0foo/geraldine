@@ -141,7 +141,15 @@ def create_dir(dir, gitkeep=False):
         file = open(dir + "/.gitkeep", 'w')
         file.write('')
         file.close()
+        
+def write_file(file_path, content):
+    """Write content to a file specified by file_path."""
+    with open(file_path, 'w') as file:
+        file.write(content)
 
+def file_exists(file_path):
+    """Check if a file exists at the given file_path."""
+    return os.path.exists(file_path)
 
 def depth_first_dir_walk(path, max_depth=20, current_depth=0):
     """ walk the directory tree in a depth first fashion with a max_depth limit """
@@ -154,13 +162,6 @@ def depth_first_dir_walk(path, max_depth=20, current_depth=0):
                 yield from depth_first_dir_walk(entry.path, max_depth, current_depth + 1)
         except Exception as e:
             print(e)
-
-def delete_dir(dirname, error=False):
-    try:
-        shutil.rmtree(dirname)
-    except OSError as e:
-        if error:
-            print("Error: %s - %s." % (e.filename, e.strerror))
 
 def clear_directory(directory):
     # Check if the directory exists
@@ -384,7 +385,7 @@ def get_simple_server(directory, port=8000):
             self.httpd.server_close()
             self.thread.join()
             print("Server stopped.")
-            
+
         def stop_server(self):
             self.is_running = False
 

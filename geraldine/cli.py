@@ -5,6 +5,7 @@ from pprint import pprint
 from geraldine import util
 import time
 import sys
+import os
 
 source_dir = primary.source_dir
 dest_dir = primary.destination_dir_name
@@ -71,6 +72,21 @@ def run():
             exit()
         
     elif args.command == 'watch':
+
+        cwd=os.getcwd()
+        lockfile_path = os.path.join(cwd, "geri-watching.lock")
+
+        if util.file_exists(lockfile_path):
+            print(f"Watcher lockfile exists, exiting: {lockfile_path}")
+            exit(1)
+            
+
+        if not os.path.exists(source_dir):
+            raise Exception(f"Can't find source directory: {source_dir}")
+        
+        util.write_file(lockfile_path, "running")
+
+
         try:
             primary.run()
         except Exception as e:
