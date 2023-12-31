@@ -43,8 +43,7 @@ def geraldine(processor_data):
     
         if isinstance(json_data, list):
             json_data = {"data": json_data}
-            print(f"Your data in {template_path} was pointing to a list, and jinja requires a dict to render.")
-            print("\tSo wrapped it in an dict under the key: \"data\"")
+            print(f"Your data in {template_path} was pointing to a list, and jinja requires a dict to render. \tSo wrapped it in an dict under the key: \"data\"")
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
