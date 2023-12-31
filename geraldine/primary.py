@@ -46,7 +46,7 @@ def load_modules():
 
 def run():  
     if not os.path.exists(source_dir):
-        print(f"Can't find source directory: {source_dir}")
+        raise Exception(f"Can't find source directory: {source_dir}")
         exit()
 
     load_modules()
