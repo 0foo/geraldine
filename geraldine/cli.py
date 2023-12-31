@@ -70,7 +70,6 @@ def run():
             print("Stopping Server")
             if the_server is not None:
                 the_server.stop_server()
-                the_server.server_close()
             exit()
         
     elif args.command == 'watch':
