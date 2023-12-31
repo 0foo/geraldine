@@ -343,3 +343,45 @@ def has_directory_changed(directory, n_seconds):
         return True
     return False
 
+def get_simple_server(directory, port=8000):
+    import http.server
+    import socketserver
+    import threading
+    import os
+
+    class SimpleServer:
+        def __init__(self, port, directory=None):
+            self.port = port
+            self.directory = directory
+            self.is_running = False
+            self.httpd = None
+            self.thread = None
+
+        def start_server(self):
+            if self.directory:
+                os.chdir(self.directory)
+
+            # Create an HTTP request handler
+            handler = http.server.SimpleHTTPRequestHandler
+
+            # Create the HTTP server
+            self.httpd = socketserver.TCPServer(("", self.port), handler)
+
+            # Use a flag to control the loop
+            self.is_running = True
+            self.thread = threading.Thread(target=self.run_server)
+            self.thread.start()
+            print(f"Serving from directory root: {os.getcwd()}")
+            print(f"Starting HTTP server at http://localhost:{self.port}")
+
+        def run_server(self):
+            while self.is_running:
+                self.httpd.handle_request()
+
+        def stop_server(self):
+            self.is_running = False
+            self.httpd.server_close()
+            self.thread.join()
+            print("Server stopped.")
+
+    return SimpleServer(port, directory) 

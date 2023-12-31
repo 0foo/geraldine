@@ -45,9 +45,15 @@ def run():
         primary.create_geri_src()
         exit()
     elif args.command == 'serve':
-        port = args.port
-        util.start_simple_server(port, dest_dir) 
+        try:
+            port = args.port
+            the_server = util.get_simple_server(source_dir, port)
+            the_server.start_server()
+        except KeyboardInterrupt:
+            print("Stopping Server")
+            the_server.stop_server()
         exit()
+        
     elif args.command == 'watch':
         try:
             primary.run()

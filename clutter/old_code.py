@@ -33,8 +33,6 @@ def get_watcher_handler(source_dir):
     return MyHandler
 
 
-
-
 def watcher(directory_to_watch, file_system_event_handler):
     import time
     from watchdog.observers import Observer
