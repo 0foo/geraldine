@@ -52,7 +52,8 @@ def run():
             primary.run()
         except Exception as e:
             print(e)
-            exit()
+            print("Exiting")
+            sys.exit(1)
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
