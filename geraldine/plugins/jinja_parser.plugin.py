@@ -12,9 +12,9 @@ remove_extensions=['jinja']
 def geraldine(processor_data):
     frontmatter = processor_data["frontmatter"]
     template_path = processor_data["src_path"]
-    content = processor_data["template_content"]
+    content = processor_data["template_content_string"]
     template_dir = os.path.dirname(template_path)
-    json_data = {"n/a": "n/a"}
+    json_data = {}
 
     if "start_key" in frontmatter:
         start_key_list = frontmatter["start_key"].split(".")

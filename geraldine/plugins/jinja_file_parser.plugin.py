@@ -15,7 +15,7 @@ def geraldine(in_data):
     json_file_path = util.find_file(template_dir, json_path) # the json file
 
     filename_key = frontmatter["filename_key"]
-    content = in_data["template_content"]
+    content = in_data["template_content_string"]
     destination_file = in_data["destination_path"]
     destination_dir = os.path.dirname(destination_file)
     destination_extension = frontmatter["extension"]

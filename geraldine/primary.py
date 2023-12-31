@@ -111,7 +111,7 @@ def process(in_dir):
 
                     processor_data = {
                         "frontmatter":frontmatter,
-                        "template_content" : content,
+                        "template_content_string" : content,
                         "src_path" : location.path,
                         "destination_path": new_path,
                         "template_filename": name
