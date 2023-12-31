@@ -96,6 +96,7 @@ def process(in_dir):
                 continue
 
             frontmatter=post.metadata
+            print(frontmatter)
             content=post.content
             processor_list = frontmatter["processor"]
             if not isinstance(processor_list, list):
