@@ -88,7 +88,7 @@ def run():
                     except Exception as e:
                         print(e)
         except KeyboardInterrupt:
-            print("Stopping Watcher")
+            print("\nStopping Watcher")
 
         exit()
 
