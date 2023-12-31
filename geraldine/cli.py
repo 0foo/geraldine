@@ -6,6 +6,7 @@ from geraldine import util
 import time
 import sys
 import os
+import traceback
 
 source_dir = primary.source_dir
 dest_dir = primary.destination_dir_name
@@ -99,7 +100,7 @@ def run():
                     try:
                         primary.run()
                     except Exception as e:
-                        raise(e)
+                        traceback.print_exc()  # This prints the full traceback
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
