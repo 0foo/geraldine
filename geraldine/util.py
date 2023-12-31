@@ -264,7 +264,7 @@ def dict_lookup_function(input_dict, lookup_list):
 def start_simple_server(port=8000, directory=None):
     import http.server
     import socketserver
-    
+
     class ReusableTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
 
@@ -414,6 +414,9 @@ def get_simple_server(directory, port=8000):
     import threading
     import os
     import requests
+    
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
 
     class SimpleServer:
         def __init__(self, port, directory=None):
@@ -430,8 +433,8 @@ def get_simple_server(directory, port=8000):
             # Create an HTTP request handler
             handler = http.server.SimpleHTTPRequestHandler
 
-            # Create the HTTP server
-            self.httpd = socketserver.TCPServer(("", self.port), handler)
+            # Create the HTTP server with ReusableTCPServer
+            self.httpd = ReusableTCPServer(("", self.port), handler)
 
             # Use a flag to control the loop
             self.is_running = True
@@ -446,14 +449,8 @@ def get_simple_server(directory, port=8000):
 
         def stop_server(self):
             self.is_running = False
-            self.httpd.server_close()
-            self.thread.join()
-            print("Server stopped.")
 
-        def stop_server(self):
-            self.is_running = False
-
-            # Send a dummy request to the server to unblock handle_request
+            # Send a dummy request to unblock handle_request
             try:
                 requests.get(f"http://localhost:{self.port}")
             except requests.RequestException:
@@ -463,4 +460,83 @@ def get_simple_server(directory, port=8000):
             self.thread.join()
             print("Server stopped.")
 
-    return SimpleServer(port, directory) 
+    return SimpleServer(port, directory)
+# def get_simple_server(directory, port=8000):
+#     import http.server
+#     import socketserver
+#     import threading
+#     import os
+#     import requests
+
+#     class SimpleServer:
+#         def __init__(self, port, directory=None):
+#             self.port = port
+#             self.directory = directory
+#             self.is_running = False
+#             self.httpd = None
+#             self.thread = None
+
+#         def start_server(self):
+#             if self.directory:
+#                 os.chdir(self.directory)
+
+#             # Create an HTTP request handler
+#             handler = http.server.SimpleHTTPRequestHandler
+
+#             # Create the HTTP server
+#             self.httpd = socketserver.TCPServer(("", self.port), handler)
+
+#             # Use a flag to control the loop
+#             self.is_running = True
+#             self.thread = threading.Thread(target=self.run_server)
+#             self.thread.start()
+#             print(f"Serving from directory root: {os.getcwd()}")
+#             print(f"Starting HTTP server at http://localhost:{self.port}")
+
+#         def run_server(self):
+#             while self.is_running:
+#                 self.httpd.handle_request()
+
+#         def stop_server(self):
+#             self.is_running = False
+#             self.httpd.server_close()
+#             self.thread.join()
+#             print("Server stopped.")
+
+#         def stop_server(self):
+#             self.is_running = False
+
+#             # Send a dummy request to the server to unblock handle_request
+#             try:
+#                 requests.get(f"http://localhost:{self.port}")
+#             except requests.RequestException:
+#                 pass  # Ignore request errors, as the server might close before handling it
+
+#             self.httpd.server_close()
+#             self.thread.join()
+#             print("Server stopped.")
+
+#     return SimpleServer(port, directory) 
+
+
+# def start_simple_server(port=8000, directory=None):
+#     import http.server
+#     import socketserver
+    
+#     class ReusableTCPServer(socketserver.TCPServer):
+#         allow_reuse_address = True
+
+#     if directory:
+#         os.chdir(directory)
+ 
+#     directory = os.getcwd()
+
+
+#     # Create an HTTP request handler
+#     handler = http.server.SimpleHTTPRequestHandler
+
+#     # Create the HTTP server with ReusableTCPServer
+#     with ReusableTCPServer(("", port), handler) as httpd:
+#         print(f"\nServing from directory root: {os.getcwd()}")
+#         print(f"Starting HTTP server at http://localhost:{port}")
+#         httpd.serve_forever()
