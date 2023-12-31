@@ -5,16 +5,16 @@ import shutil
 from geraldine import util
 
 # editable configs until config file functionality is implemented
-destination_location="geri_dist"
-source_dir = "geri_src"
+destination_dir_name="geri_dist"
+source_dir_name = "geri_src"
 max_depth=10
 priority_directories=[
     "includes"
 ]
 
 cwd = os.getcwd()
-source_dir =  os.path.join(cwd, source_dir)
-destination_dir = os.path.join(cwd, destination_location)
+source_dir =  os.path.join(cwd, source_dir_name)
+destination_dir = os.path.join(cwd, destination_dir_name)
 
 script_path = os.path.abspath(__file__)
 script_dir = os.path.dirname(script_path)
@@ -26,6 +26,8 @@ def get_info():
         "install location" : script_dir,
         "plugin path" : plugin_path 
     }
+    destination_dir = os.path.dirname(in_dir)
+
 
 def list_plugins():
     files = [f for f in os.listdir(plugin_path) 
@@ -55,7 +57,7 @@ def run():
         the_dir = os.path.join(source_dir, dir_item)
         if os.path.exists(the_dir):
             process(the_dir)
-            print(f"Priority directory {the_dir} processed")
+            print(f"Priority directory processed: {the_dir}")
 
     process(source_dir)
 
@@ -65,9 +67,10 @@ def process(in_dir):
         name = location.name
         extension = pathlib.Path(location.path).suffix
         full_path = location.path
-        new_path = util.replace_path_base(full_path, in_dir, destination_dir)
+        new_path = util.remove_subpath(in_dir, source_dir)
+        new_path = os.path.join(destination_dir, new_path)
 
-        if name == destination_location:
+        if name == destination_dir_name:
             continue
 
         # is_dir
@@ -83,7 +86,7 @@ def process(in_dir):
         if location.is_file():
             if util.is_image(location.path):
                 continue
-            
+
             post = util.get_front_matter(full_path)
 
             if not post.metadata:

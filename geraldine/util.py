@@ -318,3 +318,31 @@ def is_image(filename):
         return True
     except IOError:
         return False
+
+
+def remove_subpath(original_path, subpath_to_remove):
+    from pathlib import Path
+    original = Path(original_path)
+    subpath = Path(subpath_to_remove)
+
+    # Create a list of parts from the original path
+    parts = list(original.parts)
+
+    # Find the start of the subpath in the original path
+    try:
+        start_index = parts.index(subpath.parts[0])
+    except ValueError:
+        # Subpath not found in the original path
+        return original
+
+    # Check if the subsequent parts match the subpath
+    for i in range(1, len(subpath.parts)):
+        if start_index + i >= len(parts) or parts[start_index + i] != subpath.parts[i]:
+            # The whole subpath is not found, return the original
+            return original
+
+    # Remove the subpath parts
+    del parts[start_index:start_index + len(subpath.parts)]
+
+    # Construct and return the new path
+    return Path(*parts)
