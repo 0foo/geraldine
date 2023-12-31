@@ -49,8 +49,8 @@ def geraldine(processor_data):
         DictLoader({'the_template': content}),
         FileSystemLoader(destination_root_path)
     ]))
-    # print(env)
+    print(content)
     template = env.get_template('the_template')
     out =  template.render(json_data)
-    # print(out)
+    print(out)
     return out
