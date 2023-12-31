@@ -6,7 +6,7 @@ from geraldine import util
 
 
 source_dir = primary.source_dir
-dest_dir = primary.destination_location
+dest_dir = primary.destination_dir_name
 
 def run():
     # Create the top-level parser
