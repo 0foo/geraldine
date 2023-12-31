@@ -89,7 +89,7 @@ def run():
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-
+        print("\n\n")
         run_primary()
 
 
