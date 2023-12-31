@@ -254,59 +254,6 @@ def run_command(command, source_dir):
     else:
         print(f"Error in executing command:\n{result.stderr}")
 
-
-def get_watcher_handler(source_dir):
-    from watchdog.events import FileSystemEventHandler
-
-    class MyEventHandler(FileSystemEventHandler):
-        def __init__(self, observer):
-            self.observer = observer
-        def run(self):
-            command = "geri"
-            directory = os.path.dirname(source_dir)
-            result = subprocess.run(command, shell=True, cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            if result.returncode == 0:
-                print(f"{result.stdout}")
-            else:
-                print(f"Error in executing geri command:\n{result.stderr}")
-        def on_any_event(self, event):
-            print(f"Event detected: {event}")
-            if event.event_type == "opened":
-                return
-            if event.event_type == "closed":
-                return
-            try:
-                self.run()
-            except Exception as e:
-                print(e)
-            self.observer.stop()  # Stop after the first event
-    return MyEventHandler
-    
-
-def watcher(directory_to_watch, file_system_event_handler):
-    import time
-    from watchdog.observers import Observer
-
-    class DirectoryWatcher:
-        def __init__(self):
-            self.observer = Observer()
-
-        def run_once(self):
-            self.observer.schedule(file_system_event_handler(self.observer), directory_to_watch, recursive=True)
-            self.observer.start()
-            # print(f"Started watching directory: {directory_to_watch}. Waiting for a single event.")
-            try:
-                while True:
-                    time.sleep(1)
-            except KeyboardInterrupt:
-                print("\nStopping directory watcher...")
-            finally:
-                self.observer.stop()
-                self.observer.join()
-    watcher = DirectoryWatcher()
-    watcher.run_once()
-    
-
 def is_image(filename):
     from PIL import Image
     try:
