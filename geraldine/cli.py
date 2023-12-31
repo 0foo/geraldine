@@ -20,7 +20,8 @@ def run_primary():
     except Exception as e:
         raise(e)
     finally:
-        util.delete_file(lockfile_path)
+        if util.file_exists(lockfile_path):
+            util.delete_file(lockfile_path)
 
 def run():
     # Create the top-level parser
