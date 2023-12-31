@@ -261,6 +261,30 @@ def start_simple_server(port=8000, directory=None):
         # Start serving requests
         httpd.serve_forever()
 
+
+def start_simple_server(port=8000, directory=None):
+    import http.server
+    import socketserver
+
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
+
+    if directory:
+        os.chdir(directory)
+    
+    directory = os.getcwd()
+
+    # Create an HTTP request handler
+    handler = http.server.SimpleHTTPRequestHandler
+
+    # Create the HTTP server
+    with ReusableTCPServer(("", port), handler) as httpd:
+        print(f"\nServing from directory root: {directory}")
+        print(f"Starting HTTP server at http://localhost:{port}")
+        # Start serving requests
+        httpd.serve_forever()
+
+
 def run_command(command, source_dir):
     directory = os.path.dirname(source_dir)
     result = subprocess.run(command, shell=True, cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
