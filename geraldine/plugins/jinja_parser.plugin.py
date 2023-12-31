@@ -39,7 +39,8 @@ def geraldine(processor_data):
             json_data = json.load(f)
 
         json_data = util.dict_lookup_function(json_data, start_key_list)
- 
+        print(type(json_data))
+        # json_data = json.loads(json_data)
     # print(content)
     # print(destination_root_path)
     
