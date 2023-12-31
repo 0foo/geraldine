@@ -65,9 +65,9 @@ def run():
 def process(in_dir):
     for location in util.depth_first_dir_walk(in_dir, max_depth=max_depth):
         name = location.name
-        full_path = location.path
-        new_path = util.remove_subpath(full_path, source_dir)
-        new_path = os.path.join(destination_dir, new_path)
+        old_path = util.remove_subpath(location.path, source_dir)
+        new_path = os.path.join(destination_dir, old_path)
+        print(new_path)
 
         if name == destination_dir_name:
             continue
@@ -84,12 +84,13 @@ def process(in_dir):
         # is file
         if location.is_file():
             if util.is_image(location.path):
+                shutil.copy(location.path, new_path)
                 continue
 
-            post = util.get_front_matter(full_path)
+            post = util.get_front_matter(location.path)
 
             if not post.metadata:
-                shutil.copy(full_path, new_path)
+                shutil.copy(location.path, new_path)
                 continue
 
             frontmatter=post.metadata
