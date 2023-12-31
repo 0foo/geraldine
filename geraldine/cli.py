@@ -88,7 +88,7 @@ def run():
         try:
             primary.run()
         except Exception as e:
-            util.delete_file(lockfile_path, "running")
+            util.delete_file(lockfile_path)
             raise(e)
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
@@ -103,7 +103,7 @@ def run():
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
-        util.delete_file(lockfile_path, "running")
+        util.delete_file(lockfile_path)
         exit()
 
     try:
