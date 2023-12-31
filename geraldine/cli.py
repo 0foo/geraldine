@@ -59,7 +59,7 @@ def run():
         the_server = None  # Define the_server in the broader scope
         try:
             port = args.port
-            the_server = util.get_simple_server(source_dir, port)
+            the_server = util.get_simple_server(dest_dir, port)
             the_server.start_server()
 
             # Keep the main thread alive or perform other tasks here
