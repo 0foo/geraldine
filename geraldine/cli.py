@@ -4,6 +4,7 @@ from geraldine import primary
 from pprint import pprint
 from geraldine import util
 import time
+import sys
 
 source_dir = primary.source_dir
 dest_dir = primary.destination_dir_name
