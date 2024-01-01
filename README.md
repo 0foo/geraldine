@@ -4,7 +4,7 @@
 * Static site generators are kind of heavy weight and specific to creating static sites
 * So many things in computer science simply require transforming from one format to another, with some possible tweaks.
 * I always loved static site generaters but wanted something a little more flexible, that could just essentially process files how I wanted them to be processed and output a transformed file.
-* This is a static component generator. It takes all the things I liked about static site generators like templating, live reload, creating parallel distribution directories, dev servers, includes, etc. and makes a system that will not only create static sites but also do much more.  
+* This is a static component generator. It takes all the things I liked about static site generators like templating, live reload, creating parallel distribution directories, frontm matter, dev servers, includes, etc. and makes a system that will not only create static sites but also do much more.  
 * At a high level it's essentially a file processor.  You put files through one or more processors, i.e. a pipeline, and write the output to disk.
 * Use cases:
     * Transpiling to HTML: Convert markdown, jinja, restructured text, TOML, other templating langs -> HTML
