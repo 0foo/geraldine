@@ -3,16 +3,26 @@ import json
 import os
 from pprint import pprint
 from geraldine import util
+
 environment = jinja2.Environment()
 
 remove_extensions=['jinja']
 
-class FileNotFoundException(Exception):
-    """Exception raised when a file is not found."""
 
-    def __init__(self, message="file not found"):
-        self.message = message
-        super().__init__(self.message)
+def module_apply(processor_data):
+    frontmatter = processor_data["frontmatter"]
+    processor_list = frontmatter["processor"]
+    modules = processor_data["modules"]
+
+    if not isinstance(processor_list, list):
+        processor_list = [processor_list]
+    
+    for processor in processor_list:
+        if processor in modules:
+            the_processor=modules[processor]
+            content = the_processor.geraldine(processor_data)
+            processor_data["template_content_string"] = content
+    return processor_data
 
 
 def geraldine(in_data):
@@ -57,7 +67,9 @@ def geraldine(in_data):
             else:
                 filename = util.dict_lookup_function(dict_item, filename_key.split("."))
             merged_template = jinja_template.render(dict_item)
+            in_data["template_content_string"] = merged_template
+            final_content = module_apply(in_data)
             filename = filename + destination_extension
             destination_location = os.path.join(destination_dir, filename)
             with open(destination_location, "w") as file:
-                 file.write(merged_template)
+                 file.write(final_content)

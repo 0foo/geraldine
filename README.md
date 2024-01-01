@@ -165,5 +165,5 @@ extension: html
 * Refactor post processing block into its own spot
 * Implement yaml and toml processors
 * Better docs with examples
-* File watching
+* Move the entire logic to a queue, where a file is processed then put on the queue with metadata, to either be further processed or sent to disk.
 * Tests

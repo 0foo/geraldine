@@ -65,6 +65,7 @@ def run():
     print(f"Source directory built: {source_dir}")
 
 
+
 def process(in_dir):
     for location in util.depth_first_dir_walk(in_dir, max_depth=max_depth):
         name = location.name
@@ -114,7 +115,8 @@ def process(in_dir):
                         "project_root_path": root_dir,
                         "template_filename": name,
                         "source_dir_name": source_dir_name,
-                        "destination_dir_name": destination_dir_name
+                        "destination_dir_name": destination_dir_name,
+                        "modules": modules
                     }
 
                     content = the_processor.geraldine(processor_data)
