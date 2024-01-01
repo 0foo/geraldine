@@ -3,6 +3,7 @@ import json
 import os
 from pprint import pprint
 from geraldine import util
+import copy
 
 environment = jinja2.Environment()
 
@@ -10,6 +11,7 @@ remove_extensions=['jinja']
 
 
 def module_apply(processor_data):
+    processor_data =  copy.deepcopy(processor_data)
     frontmatter = processor_data["frontmatter"]
     processor_list = frontmatter["processor"]
     modules = processor_data["modules"]
@@ -70,8 +72,7 @@ def geraldine(in_data):
                 filename = util.dict_lookup_function(dict_item, filename_key.split("."))
             merged_template = jinja_template.render(dict_item)
             filename = filename + destination_extension
-            in_data["template_content_string"] = merged_template
-            print(filename)
+            in_data["merged_template"] = merged_template
             final_content = module_apply(in_data)
             destination_location = os.path.join(destination_dir, filename)
             with open(destination_location, "w") as file:
