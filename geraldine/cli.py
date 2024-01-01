@@ -18,9 +18,7 @@ def run_primary():
     except FileNotFoundError as e:
         print(e)
     except Exception as e:
-        if util.file_exists(lockfile_path):
-            util.delete_file(lockfile_path)
-        raise(e)
+        traceback.print_exc()
 
 def run():
     # Create the top-level parser
