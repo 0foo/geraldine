@@ -17,10 +17,9 @@ def module_apply(processor_data):
     if not isinstance(processor_list, list):
         processor_list = [processor_list]
     
-    print(processor_data)
-    processor_list.remove("jinja_file_parser")
-    
     for processor in processor_list:
+        if processor == "jinja_file_parser":
+            continue
         if processor in modules:
             the_processor=modules[processor]
             content = the_processor.geraldine(processor_data)
