@@ -27,7 +27,7 @@ def module_apply(processor_data):
             the_processor=modules[processor]
             content = the_processor.geraldine(processor_data)
             processor_data["template_content_string"] = content
-            print(processor_data["template_content_string"])
+            print(processor_data["the_dict_item"])
     processor_data["template_content_string"] = original_template_content_string
     return content
 
@@ -68,7 +68,6 @@ def geraldine(in_data):
     # iterate
     jinja_template = environment.from_string(content) # the jinja template
     for dict_item in dict_to_use:
-            # print(dict_item)
             if "{{" in filename_key and "}}" in filename_key:
                  filename = util.destination_file_name_parser(filename_key, dict_item)
             else:
@@ -76,6 +75,9 @@ def geraldine(in_data):
             merged_template = jinja_template.render(dict_item)
             filename = filename + destination_extension
             in_data["merged_template"] = merged_template
+            in_data["filename"] = filename
+            in_data["the_dict_item"] = dict_item["class"]["name"]
+            print(in_data["filename"])
             final_content = module_apply(in_data)
             destination_location = os.path.join(destination_dir, filename)
             with open(destination_location, "w") as file:
