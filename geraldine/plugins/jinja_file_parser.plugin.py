@@ -70,6 +70,7 @@ def geraldine(in_data):
                 filename = util.dict_lookup_function(dict_item, filename_key.split("."))
             merged_template = jinja_template.render(dict_item)
             in_data["template_content_string"] = merged_template
+            in_data["filename"] = filename
             final_content = module_apply(in_data)
             filename = filename + destination_extension
             destination_location = os.path.join(destination_dir, filename)
