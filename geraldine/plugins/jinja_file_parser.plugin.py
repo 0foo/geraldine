@@ -76,7 +76,7 @@ def geraldine(in_data):
             filename = filename + destination_extension
             in_data["merged_template"] = merged_template
             in_data["filename"] = filename
-            in_data["the_dict_item"] = dict_item["class"]["name"]
+            in_data["the_dict_item"] = dict_item["class"][0]["name"]
             print(in_data["filename"])
             final_content = module_apply(in_data)
             destination_location = os.path.join(destination_dir, filename)
