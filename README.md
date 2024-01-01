@@ -7,7 +7,7 @@
 * This is a static component generator. It takes all the things I liked about static site generators like templating, live reload, creating parallel distribution directories, dev servers, includes, etc. and makes a system that will not only create static sites but also do much more.  
 * At a high level it's essentially a file processor.  You put files through one or more processors, i.e. a pipeline, and write the output to disk.
 * Use cases:
-    * Transpiling to HTML: Convert markdown, jinja, restructured text, other templating langs -> HTML
+    * Transpiling to HTML: Convert markdown, jinja, restructured text, TOML, other templating langs -> HTML
     * Transpiling to anything: Converting anything to anything. Just write a plugin!
     * Data population:  Combining JSON plus a template and outputting to a file
         * This also allows one jinja template that can iterate over many elements in json. 
