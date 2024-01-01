@@ -27,6 +27,7 @@ def module_apply(processor_data):
             the_processor=modules[processor]
             content = the_processor.geraldine(processor_data)
             processor_data["template_content_string"] = content
+            print(processor_data["template_content_string"])
     processor_data["template_content_string"] = original_template_content_string
     return content
 
