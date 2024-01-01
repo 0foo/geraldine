@@ -11,10 +11,11 @@ remove_extensions=['jinja']
 
 
 def module_apply(processor_data):
-    processor_data =  copy.deepcopy(processor_data)
     frontmatter = processor_data["frontmatter"]
     processor_list = frontmatter["processor"]
     modules = processor_data["modules"]
+    original_template_content_string = processor_data["template_content_string"]
+
 
     if not isinstance(processor_list, list):
         processor_list = [processor_list]
@@ -26,7 +27,8 @@ def module_apply(processor_data):
             the_processor=modules[processor]
             content = the_processor.geraldine(processor_data)
             processor_data["template_content_string"] = content
-    return processor_data
+    processor_data["template_content_string"] = original_template_content_string
+    return content
 
 
 def geraldine(in_data):
@@ -76,4 +78,4 @@ def geraldine(in_data):
             final_content = module_apply(in_data)
             destination_location = os.path.join(destination_dir, filename)
             with open(destination_location, "w") as file:
-                 file.write(final_content["template_content_string"])
+                 file.write(final_content)
