@@ -36,7 +36,7 @@ json_path: /somedir/data/myjson.json
 Foo bar!!!
 
 ```
-* The data file:
+* The data file @ `/somedir.data/myjson.json`:
 
 ```
 {
@@ -125,7 +125,7 @@ geri info
 
 * see plugin folder: [./geraldine/plugins](./geraldine/plugins)
 
-* The name of the plugin (without .plugin.py) will be what you set in the `processer` field in the front matter
+* The name of the plugin (without: .plugin.py) will be what you set in the `processer` field in the front matter
 
 * The plugin needs a top level function with the name `geraldine` that gets called by the main system.
 
@@ -157,10 +157,12 @@ geri info
 * For things like includes, you can define priority directories.
 * This will process everything the same except these directories will be processed first. 
 * This allows you to define a jinja template to process and use the include tag with an already built directory: {% include sometemplate.html %} 
-* The currently only implemented priority directory so far is geri_src/includes.
+* The currently only implemented priority directory so far is geri_src/includes. 
+* Going to make this customizable to add any you want when I have the bandwidth
+
 
 ## To Do:
-* Stick it up on pypi to make it installable with pip
+* Stick it up on pypi to make it installable with pip when the hackers/spammers go away
 * Make config files
     * a user folder: ~/.geraldine 
     * also project level config files, the code will bubble up looking for the first .geraldine config file match, and use ~/.ger.. as default if none
@@ -172,5 +174,4 @@ geri info
 * Refactor post processing block into its own spot
 * Implement yaml and toml processors
 * Better docs with examples
-* Move the entire logic to a queue, where a file is processed then put on the queue with metadata, to either be further processed or sent to disk.
-* Tests
+* Possibly? move the entire logic to a queue, where a file is processed then put on the queue with metadata, to either be further processed or sent to disk.
