@@ -16,7 +16,8 @@ def module_apply(processor_data):
 
     if not isinstance(processor_list, list):
         processor_list = [processor_list]
-        
+    
+    print(processor_data)
     processor_list.remove("jinja_file_parser")
     
     for processor in processor_list:
