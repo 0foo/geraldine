@@ -121,6 +121,7 @@ def process(in_dir):
 
                     content = the_processor.geraldine(processor_data)
 
+
                     # begin post processing
                     if hasattr(the_processor, 'remove_extensions'):
                         for remove_extension in the_processor.remove_extensions:
@@ -128,6 +129,8 @@ def process(in_dir):
                                 remove_extension = "." + remove_extension
                             new_path = util.remove_extension_from_path(new_path, remove_extension)
                     # post processing end
+                    if not content:
+                        break
                 else:
                     print(processor + " module not found in: " + location.path)
 
