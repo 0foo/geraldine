@@ -15,7 +15,7 @@ def module_apply(processor_data):
     processor_list = frontmatter["processor"]
     modules = processor_data["modules"]
     original_template_content_string = processor_data["template_content_string"]
-    processor_data["template_content_string"] = processor_data["merged_data"]
+    processor_data["template_content_string"] = processor_data["merged_template"]
 
     if not isinstance(processor_list, list):
         processor_list = [processor_list]
