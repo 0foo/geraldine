@@ -5,7 +5,7 @@
 * So many things in computer science simply require transforming from one format to another, with some possible tweaks.
 * I always loved static site generaters but wanted something a little more flexible, that could just essentially process files how I wanted them to be processed and output a transformed file.
 * This is a static component generator. It takes all the things I liked about static site generators like templating, live reload, creating parallel distribution directories, front matter, dev servers, includes, etc. and makes a system that will not only create static sites but also do much more.  
-* At a high level it's essentially a file processor.  You put files through one or more processors, i.e. a pipeline, and write the output to disk.
+* At a high level it's essentially a file processor with bells and whistles.  You put files through one or more processors, i.e. a pipeline, and write the output to disk.
 * Use cases:
     * Transpiling to HTML: Convert markdown, jinja, restructured text, TOML, other templating langs -> HTML
     * Transpiling to anything: Converting anything to anything. Just write a plugin!
@@ -160,6 +160,11 @@ geri info
 * The currently only implemented priority directory so far is geri_src/includes. 
 * Going to make this customizable to add any you want when I have the bandwidth
 
+## Caveats
+* I'm just a solo person working on this so far.  And this is just a single thread working on a single file at a time. 
+* So extreme use cases like massive numbers of files might be slow (have't tested), workarounds include making several source folders.
+* This loads the whole file into memory to process, so might be limited by process memory limits or system limits or architecture limits if the file is really big(2Gi+).
+* There's ways I've thought of to work around these like having a queue and workers and tags for large files to trigger line by line processing, but don't have the time presently.
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip when the hackers/spammers go away
@@ -174,4 +179,3 @@ geri info
 * Refactor post processing block into its own spot
 * Implement yaml and toml processors
 * Better docs with examples
-* Possibly? move the entire logic to a queue, where a file is processed then put on the queue with metadata, to either be further processed or sent to disk.

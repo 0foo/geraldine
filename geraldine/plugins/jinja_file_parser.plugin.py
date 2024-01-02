@@ -30,6 +30,8 @@ def module_apply(processor_data):
     processor_data["template_content_string"] = original_template_content_string
     return content
 
+def process_file_name_key(filename):
+    pass
 
 def geraldine(in_data):
     frontmatter = in_data["frontmatter"]
@@ -65,12 +67,17 @@ def geraldine(in_data):
 
 
     # iterate
+    # file template
     jinja_template = environment.from_string(content) # the jinja template
+
     for dict_item in dict_to_use:
-            if "{{" in filename_key and "}}" in filename_key:
-                 filename = util.destination_file_name_parser(filename_key, dict_item)
-            else:
-                filename = util.dict_lookup_function(dict_item, filename_key.split("."))
+            jinja_filename_template = environment.from_string(filename_key)
+            print(filename_key)
+            filename = jinja_filename_template.render(dict_item)
+            # if "{{" in filename_key and "}}" in filename_key:
+            #      filename = util.destination_file_name_parser(filename_key, dict_item)
+            # else:
+            #     filename = util.dict_lookup_function(dict_item, filename_key.split("."))
             merged_template = jinja_template.render(dict_item)
             filename = filename + destination_extension
             in_data["merged_template"] = merged_template

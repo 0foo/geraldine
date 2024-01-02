@@ -24,33 +24,6 @@ def destination_file_name_parser(filename_string, json_file):
     return re.sub(pattern, dynamic_replace, filename_string)
 
 
-# escaping functionality, in progress
-# def convert_to_ascii_escapes(match):
-#     char_after_slash = match.group()[1]
-#     ascii_code = ord(char_after_slash)
-#     return "{" + str(ascii_code) + "}"
-# def convert_from_ascii_escapes(match):
-#     number = int(match.group(1))
-#     return chr(number)
-# def escape_to_ascii_tags(s, pattern):
-#     return re.sub(pattern, lambda match: convert_to_ascii_escapes(match), s)
-# def ascii_tags_to_character(s):
-#     pattern = r"\{(\d+)\}"
-#     return re.sub(pattern, convert_from_ascii_escapes, s)
-
-# # 0.0.class + test.1.name\+ + thing.0.amabob
-# def destination_file_name_parser(filename_string, json_file, separator="_"):
-#     filename_string = escape_to_ascii_tags(filename_string, "\\.")
-#     filename_list = filename_string.split("+")
-#     outname = []
-#     for item in filename_list:
-#         item_list = item.split(".")
-#         item_list = [ascii_tags_to_character(x) for x in item_list]
-#         result = dict_lookup_function(item_list, json_file)
-#         outname.append(result)
-#     return separator.join(outname)
-
-
 def remove_extension_from_path(file_path, extension_to_remove):
     extension_queue = []
     root, extension = os.path.splitext(file_path)

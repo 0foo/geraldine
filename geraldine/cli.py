@@ -26,7 +26,7 @@ def run():
     subparsers = parser.add_subparsers(dest='command', help='commands')
 
     # Create a subparser for the 'info' command
-    info_parser = subparsers.add_parser('info', help='Show install location')
+    info_parser = subparsers.add_parser('info', help='Show locations/plugins')
 
     # Create a subparser for the 'init' command
     init_parser = subparsers.add_parser('init', help='Create source directory for geraldine templates.')
