@@ -72,12 +72,7 @@ def geraldine(in_data):
 
     for dict_item in dict_to_use:
             jinja_filename_template = environment.from_string(filename_key)
-            print(filename_key)
             filename = jinja_filename_template.render(dict_item)
-            # if "{{" in filename_key and "}}" in filename_key:
-            #      filename = util.destination_file_name_parser(filename_key, dict_item)
-            # else:
-            #     filename = util.dict_lookup_function(dict_item, filename_key.split("."))
             merged_template = jinja_template.render(dict_item)
             filename = filename + destination_extension
             in_data["merged_template"] = merged_template
