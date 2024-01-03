@@ -30,6 +30,7 @@ def module_apply(processor_data):
     processor_data["template_content_string"] = original_template_content_string
     return content
 
+
 def process_file_name_key(filename):
     pass
 
@@ -52,10 +53,8 @@ def geraldine(in_data):
 
     if destination_extension[0] != ".":
         destination_extension = f".{destination_extension}"
-    
 
-
-    # start data
+    # process start data
     with open(json_file_path, "r") as f:
         json_data = json.load(f)
     if "start_key" in frontmatter:
