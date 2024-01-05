@@ -444,6 +444,7 @@ def create_logger(logger_name="application_logger", log_location=None, format='%
     # Set the level of the logger. This can be DEBUG, INFO, WARNING, ERROR, or CRITICAL
     logger.setLevel(logging.DEBUG)
     # Create a handler that writes log messages to a file
+    create_dir(log_location)
     handler = logging.FileHandler(log_location)
     # Optionally, create a formatter to format the log messages
     formatter = logging.Formatter(format)
