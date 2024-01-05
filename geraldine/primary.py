@@ -4,6 +4,13 @@ import pathlib
 import shutil
 from geraldine import util
 import traceback
+import logger
+
+
+# setup logs
+util.create_logger()
+log_it = logger.getLogger("application_logger")
+
 
 # editable configs until config file functionality is implemented
 destination_dir_name="geri_dist"
@@ -48,7 +55,9 @@ def load_modules():
 
 def run():  
     if not os.path.exists(source_dir):
-        raise Exception(f"Can't find source directory: {source_dir}")
+
+        logger.critical('Can\'t find source directory')
+        # raise Exception(f"Can't find source directory: {source_dir}")
 
     load_modules()
 

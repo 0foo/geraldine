@@ -433,3 +433,18 @@ def get_simple_server(directory, port=8000):
             print("Server stopped.")
 
     return SimpleServer(port, directory)
+
+def create_logger(logger_name="application_logger", format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'):
+    import logging
+    # Create a logger object
+    logger = logging.getLogger(logger_name)
+    # Set the level of the logger. This can be DEBUG, INFO, WARNING, ERROR, or CRITICAL
+    logger.setLevel(logging.DEBUG)
+    # Create a handler that writes log messages to a file
+    handler = logging.FileHandler(f"/logs/{logger_name}.log")
+    # Optionally, create a formatter to format the log messages
+    formatter = logging.Formatter(format)
+    # Set the formatter for the handler
+    handler.setFormatter(formatter)
+    # Add the handler to the logger
+    logger.addHandler(handler)
