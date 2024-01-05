@@ -4,6 +4,8 @@ import os
 from pprint import pprint
 from geraldine import util
 import copy
+from jinja2 import Environment, ChoiceLoader, FileSystemLoader, DictLoader
+
 
 environment = jinja2.Environment()
 
@@ -39,6 +41,10 @@ def geraldine(in_data):
     json_path = frontmatter["json_path"]
     source_path = in_data["src_path"]
     template_dir = os.path.dirname(in_data["src_path"])
+    project_root_path = in_data["project_root_path"]
+    destination_dir_name = in_data["destination_dir_name"]
+    destination_root_path = os.path.join(project_root_path, destination_dir_name)
+    
     try:
         json_file_path = util.find_file(template_dir, json_path) # the json file
     except Exception as e:
@@ -67,15 +73,29 @@ def geraldine(in_data):
 
     # iterate
     # file template
-    jinja_template = environment.from_string(content) # the jinja template
+    # jinja_template = environment.from_string(content) # the jinja template
+    env = Environment(loader=ChoiceLoader([
+        DictLoader({'the_template': content}),
+        FileSystemLoader(destination_root_path)
+    ]))
+    jinja_template = env.get_template('the_template')
 
+    
     for dict_item in dict_to_use:
+            
+            # process filename template
             jinja_filename_template = environment.from_string(filename_key)
             filename = jinja_filename_template.render(dict_item)
+
+            # process content template
             merged_template = jinja_template.render(dict_item)
+
+            # apply additional processors defined in front matter
+            final_content = module_apply(in_data)
+
+            # write to filesystem
             filename = filename + destination_extension
             in_data["merged_template"] = merged_template
-            final_content = module_apply(in_data)
             destination_location = os.path.join(destination_dir, filename)
             with open(destination_location, "w") as file:
                  file.write(final_content)
