@@ -89,13 +89,13 @@ def geraldine(in_data):
 
             # process content template
             merged_template = jinja_template.render(dict_item)
+            in_data["merged_template"] = merged_template
 
             # apply additional processors defined in front matter
             final_content = module_apply(in_data)
 
             # write to filesystem
             filename = filename + destination_extension
-            in_data["merged_template"] = merged_template
             destination_location = os.path.join(destination_dir, filename)
             with open(destination_location, "w") as file:
                  file.write(final_content)
