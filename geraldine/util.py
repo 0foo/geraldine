@@ -443,7 +443,7 @@ def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=l
 
         RED = "\033[1;31m"
         RESET = "\033[0;0m"
-        FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        FORMAT = "%(levelname)s - %(message)s"
 
         FORMATS = {
             logging.DEBUG: FORMAT,
