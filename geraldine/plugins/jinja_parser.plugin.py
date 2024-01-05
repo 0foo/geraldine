@@ -47,7 +47,7 @@ def geraldine(processor_data):
             json_data = {"data": json_data}
             the_logger.info(f"Your json_path frontmatter data in {template_path} was pointing to a list, "
                             "and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\". " 
-                            "Use the key \'data\' as the root in your jinja template.")
+                            "Use the key \"data\" as the root variable in your jinja template.")
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
