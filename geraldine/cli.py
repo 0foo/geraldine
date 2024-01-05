@@ -84,7 +84,7 @@ def run():
         primary.run()
 
 
-        print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
+        print(f"Watching directory: {source_dir} \nPress Ctrl+C to stop: ")
         try:
             time_counter = 0
             while True:
