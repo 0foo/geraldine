@@ -3,6 +3,7 @@ import os
 import pathlib
 import shutil
 from geraldine import util
+import traceback
 
 # editable configs until config file functionality is implemented
 destination_dir_name="geri_dist"
@@ -119,8 +120,16 @@ def process(in_dir):
                         "modules": modules
                     }
 
-                    content = the_processor.geraldine(processor_data)
 
+                    # handle exceptions here so that it only fails on a single file and doesn't stop building everything else
+                    try:
+                        content = the_processor.geraldine(processor_data)
+                    except FileNotFoundError as e:
+                        print(e)
+                        continue
+                    except Exception as e:
+                        traceback.print_exc()
+                        continue
 
                     # begin post processing
                     if hasattr(the_processor, 'remove_extensions'):

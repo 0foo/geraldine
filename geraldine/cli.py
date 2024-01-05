@@ -12,14 +12,6 @@ source_dir = primary.source_dir
 dest_dir = primary.destination_dir_name
 lockfile_path = "/tmp/.geriwatch"
 
-def run_primary():
-    try:
-        primary.run()
-    except FileNotFoundError as e:
-        print(e)
-        traceback.print_exc()
-    except Exception as e:
-        traceback.print_exc()
 
 def run():
     # Create the top-level parser
@@ -89,7 +81,7 @@ def run():
         
         util.write_file(lockfile_path, "running")
         print(f"Watcher lockfile created: {lockfile_path}")
-        run_primary()
+        primary.run()
 
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
@@ -98,13 +90,8 @@ def run():
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
-                    run_primary()
+                    primary.run()
                     print("\n")
-
-                # always rebuild for troubleshooting purposes
-                run_primary()
-                print("\n")
-
 
         except KeyboardInterrupt:
             print("\nStopping Watcher")
@@ -113,7 +100,7 @@ def run():
         print(f"Watcher lockfile deleted: {lockfile_path}")
         exit()
 
-    run_primary()
+    primary.run()
 
 
 if __name__ == "__main__":
