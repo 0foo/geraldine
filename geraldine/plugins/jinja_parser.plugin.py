@@ -45,15 +45,14 @@ def geraldine(processor_data):
     
         if isinstance(json_data, list):
             json_data = {"data": json_data}
-            the_logger.info(f""" \
-                            Your json_path frontmatter data in {template_path} was pointing to a list, \
-                            and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\" \
-                            Use the key data as the root in your jinja template.""")
+            the_logger.info(f"Your json_path frontmatter data in {template_path} was pointing to a list, "
+                            "and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\". " 
+                            "Use the key \'data\' as the root in your jinja template.")
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
         FileSystemLoader(destination_root_path)
     ]))
-    template = env.get_template('the_template')
+    template = env.get_template('the_template') 
     out =  template.render(json_data)
     return out
