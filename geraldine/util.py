@@ -447,7 +447,7 @@ def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=l
         YELLOW = "\033[1;33m"
         MAGENTA = "\033[1;35m"
         RESET = "\033[0;0m"
-        FORMAT = "%(levelname)s - %(message)s"
+        FORMAT = "%(message)s"
 
           # Assign formats for each log level
         FORMATS = {
