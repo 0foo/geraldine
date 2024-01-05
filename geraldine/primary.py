@@ -121,9 +121,11 @@ def process(in_dir):
                     }
 
 
-                    # handle processor exceptions on a per file basis
-                    # so that it only fails on a single file
-                    # and continues iterating the directory and building everything else
+                    # Note 1: handle processor exceptions here, on a per file basis,
+                    #       so that it only fails on a single file
+                    #       and continues to iterate the directory and build everything else
+                    # Note 2: Trimming down output from File Not Found exceptions, as those are relatively
+                    #       easy to troubleshoot 
                     try:
                         content = the_processor.geraldine(processor_data)
                     except FileNotFoundError as e:
