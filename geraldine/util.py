@@ -436,7 +436,28 @@ def get_simple_server(directory, port=8000):
 
     return SimpleServer(port, directory)
 
-def create_simple_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=logging.INFO):
+def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=logging.INFO):
+
+    class CustomFormatter(logging.Formatter):
+        """Logging Formatter to add colors and count warning / errors"""
+
+        RED = "\033[1;31m"
+        RESET = "\033[0;0m"
+        FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+        FORMATS = {
+            logging.DEBUG: FORMAT,
+            logging.INFO: FORMAT,
+            logging.WARNING: FORMAT,
+            logging.ERROR: FORMAT,
+            logging.CRITICAL: RED + FORMAT + RESET,
+        }
+
+        def format(self, record):
+            log_fmt = self.FORMATS.get(record.levelno)
+            formatter = logging.Formatter(log_fmt)
+            return formatter.format(record)
+
     """Function to setup a logger."""
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -452,6 +473,5 @@ def create_simple_logger(name, log_file="./logs", to_file=True, to_stdout=True, 
     if to_stdout:
         # Stream handler for stdout
         stream_handler = logging.StreamHandler(sys.stdout)
-        stream_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        stream_handler.setFormatter(stream_formatter)
+        stream_handler.setFormatter(CustomFormatter())
         logger.addHandler(stream_handler)
