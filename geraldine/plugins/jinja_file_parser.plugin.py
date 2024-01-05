@@ -48,8 +48,7 @@ def geraldine(in_data):
     try:
         json_file_path = util.find_file(template_dir, json_path) # the json file
     except Exception as e:
-        print(f"Cant find json data in front matter of: {source_path}")
-        raise(e)
+        raise FileNotFoundError(f"Cant find json data in front matter of: {source_path}")
 
     filename_key = frontmatter["filename_key"]
     content = in_data["template_content_string"]
