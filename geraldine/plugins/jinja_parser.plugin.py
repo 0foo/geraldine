@@ -3,6 +3,9 @@ import json
 import os
 from geraldine import util
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, DictLoader
+import logging
+
+the_logger = logging.getLogger("app_logger")
 
 environment = jinja2.Environment()
 
@@ -42,7 +45,7 @@ def geraldine(processor_data):
     
         if isinstance(json_data, list):
             json_data = {"data": json_data}
-            print(f"Your json_path frontmatter data in {template_path} was pointing to a list, and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\"")
+            the_logger.info(f"Your json_path frontmatter data in {template_path} was pointing to a list, and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\"")
     
     env = Environment(loader=ChoiceLoader([
         DictLoader({'the_template': content}),
