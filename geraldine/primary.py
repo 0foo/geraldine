@@ -7,7 +7,7 @@ import traceback
 import logging
 
 # setup logs
-util.create_simple_logger('app_logger', to_file=False)
+util.create_logger('app_logger', to_file=False)
 the_logger = logging.getLogger("app_logger")
 
 
