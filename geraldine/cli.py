@@ -17,6 +17,7 @@ def run_primary():
         primary.run()
     except FileNotFoundError as e:
         print(e)
+        traceback.print_exc()
     except Exception as e:
         traceback.print_exc()
 
@@ -93,11 +94,18 @@ def run():
 
         print(f"Watching directory, Press Ctrl+C to stop: {source_dir}")
         try:
+            time_counter = 0
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
                     run_primary()
                     print("\n")
+
+                # always rebuild for troubleshooting purposes
+                run_primary()
+                print("\n")
+
+
         except KeyboardInterrupt:
             print("\nStopping Watcher")
   
