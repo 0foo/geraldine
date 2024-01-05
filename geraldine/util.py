@@ -7,6 +7,8 @@ import yaml
 import subprocess
 from time import sleep
 import time
+import logging
+import sys
 from watchdog.events import FileSystemEventHandler
 
 
@@ -434,21 +436,22 @@ def get_simple_server(directory, port=8000):
 
     return SimpleServer(port, directory)
 
-def create_logger(logger_name="application_logger", log_location=None, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'):
-    if not log_location:
-        log_location = f"./logs/{logger_name}.log"
+def create_simple_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=logging.INFO):
+    """Function to setup a logger."""
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
 
-    import logging
-    # Create a logger object
-    logger = logging.getLogger(logger_name)
-    # Set the level of the logger. This can be DEBUG, INFO, WARNING, ERROR, or CRITICAL
-    logger.setLevel(logging.DEBUG)
-    # Create a handler that writes log messages to a file
-    create_dir(log_location)
-    handler = logging.FileHandler(log_location)
-    # Optionally, create a formatter to format the log messages
-    formatter = logging.Formatter(format)
-    # Set the formatter for the handler
-    handler.setFormatter(formatter)
-    # Add the handler to the logger
-    logger.addHandler(handler)
+    if to_file:
+        create_dir(log_file)
+        # File handler for output file
+        file_handler = logging.FileHandler(log_file)
+        file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
+
+    if to_stdout:
+        # Stream handler for stdout
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        stream_handler.setFormatter(stream_formatter)
+        logger.addHandler(stream_handler)

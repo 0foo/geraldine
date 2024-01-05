@@ -6,10 +6,9 @@ from geraldine import util
 import traceback
 import logging
 
-
 # setup logs
-util.create_logger()
-log_it = logging.getLogger("application_logger")
+util.create_simple_logger('app_logger', to_file=False)
+the_logger = logging.getLogger("app_logger")
 
 
 # editable configs until config file functionality is implemented
@@ -55,9 +54,7 @@ def load_modules():
 
 def run():  
     if not os.path.exists(source_dir):
-
-        logger.critical('Can\'t find source directory')
-        # raise Exception(f"Can't find source directory: {source_dir}")
+        raise Exception(f"Can't find source directory: {source_dir}")
 
     load_modules()
 
@@ -138,7 +135,7 @@ def process(in_dir):
                     try:
                         content = the_processor.geraldine(processor_data)
                     except FileNotFoundError as e:
-                        print(e)
+                        the_logger.critical(e)
                         continue
                     except Exception as e:
                         traceback.print_exc()
