@@ -441,15 +441,20 @@ def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=l
     class CustomFormatter(logging.Formatter):
         """Logging Formatter to add colors and count warning / errors"""
 
+            # ANSI color escape sequences
         RED = "\033[1;31m"
+        BLUE = "\033[1;34m"
+        YELLOW = "\033[1;33m"
+        MAGENTA = "\033[1;35m"
         RESET = "\033[0;0m"
         FORMAT = "%(levelname)s - %(message)s"
 
+          # Assign formats for each log level
         FORMATS = {
             logging.DEBUG: FORMAT,
-            logging.INFO: FORMAT,
-            logging.WARNING: FORMAT,
-            logging.ERROR: FORMAT,
+            logging.INFO: BLUE + FORMAT + RESET,
+            logging.WARNING: YELLOW + FORMAT + RESET,
+            logging.ERROR: MAGENTA + FORMAT + RESET,
             logging.CRITICAL: RED + FORMAT + RESET,
         }
 
