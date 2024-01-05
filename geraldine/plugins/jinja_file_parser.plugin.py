@@ -67,7 +67,7 @@ def geraldine(in_data):
     else:
          start_key_list = []
     dict_to_use = util.dict_lookup_function(json_data, start_key_list)
-    print(f"There are {len(dict_to_use)} in {os.path.basename(source_path)} reading {os.path.basename(json_path)} dataset being converted to files." )
+    print(f"There are {len(dict_to_use)} componenets being build from {os.path.basename(source_path)} reading {os.path.basename(json_path)} dataset being converted to files." )
 
 
     # iterate
