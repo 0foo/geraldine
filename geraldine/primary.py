@@ -4,12 +4,12 @@ import pathlib
 import shutil
 from geraldine import util
 import traceback
-import logger
+import logging
 
 
 # setup logs
 util.create_logger()
-log_it = logger.getLogger("application_logger")
+log_it = logging.getLogger("application_logger")
 
 
 # editable configs until config file functionality is implemented
