@@ -18,6 +18,7 @@ def module_apply(processor_data):
     modules = processor_data["modules"]
     original_template_content_string = processor_data["template_content_string"]
     processor_data["template_content_string"] = processor_data["merged_template"]
+    project_root_path = processor_data["project_root_path"]
 
     if not isinstance(processor_list, list):
         processor_list = [processor_list]
@@ -46,7 +47,7 @@ def geraldine(in_data):
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
     
     try:
-        json_file_path = util.find_file(template_dir, json_path) # the json file
+        json_file_path = util.find_file(json_path, template_dir, project_root_path) # the json file
     except Exception as e:
         raise FileNotFoundError(f"Cant find json data in front matter of: {source_path}")
 

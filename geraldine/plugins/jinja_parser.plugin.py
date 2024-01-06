@@ -33,7 +33,7 @@ def geraldine(processor_data):
         json_path = frontmatter["json_path"]
 
         try:
-            json_file_path = util.find_file(source_template_dir, json_path)
+            json_file_path = util.find_file(json_path, source_template_dir, project_root_path)
         except Exception as e:
             raise FileNotFoundError(f"Cant find json data {json_path} in front matter of: {template_path}.")
         
