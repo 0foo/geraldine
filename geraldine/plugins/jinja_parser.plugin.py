@@ -30,11 +30,11 @@ def geraldine(processor_data):
     else:
         start_key_list = []
 
-    if "json_path" in frontmatter:
-        json_path = frontmatter["json_path"]
+    if "json_project_path" in frontmatter:
+        json_project_path = frontmatter["json_project_path"]
 
         try:
-            json_file_path = util.find_file(json_path, source_template_dir, project_root_src_dir)
+            json_file_path = util.find_file(json_project_path, source_template_dir, project_root_src_dir)
         except Exception as e:
             raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {template_path}.")
         
@@ -46,7 +46,7 @@ def geraldine(processor_data):
     
         if isinstance(json_data, list):
             json_data = {"data": json_data}
-            the_logger.info(f"Your json_path frontmatter data in {template_path} was pointing to a list, "
+            the_logger.info(f"Your json_project_path frontmatter data in {template_path} was pointing to a list, "
                             "and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\". " 
                             "Use the key \"data\" as the root variable in your jinja template.")
     

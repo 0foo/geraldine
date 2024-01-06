@@ -41,7 +41,7 @@ def process_file_name_key(filename):
 
 def geraldine(in_data):
     frontmatter = in_data["frontmatter"]
-    json_path = frontmatter["json_path"]
+    json_project_path = frontmatter["json_project_path"]
     source_path = in_data["src_path"]
     template_dir = os.path.dirname(in_data["src_path"])
     project_root_path = in_data["project_root_path"]
@@ -50,7 +50,7 @@ def geraldine(in_data):
     project_root_src_dir = in_data["project_root_src_dir"]
     
     try:
-        json_file_path = util.find_file(json_path, template_dir, project_root_src_dir) # the json file
+        json_file_path = util.find_file(json_project_path, template_dir, project_root_src_dir) # the json file
     except Exception as e:
         raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {source_path}")
 
@@ -71,7 +71,7 @@ def geraldine(in_data):
     else:
          start_key_list = []
     dict_to_use = util.dict_lookup_function(json_data, start_key_list)
-    the_logger.debug(f"There are {len(dict_to_use)} components being build from the {os.path.basename(source_path)} template reading the {os.path.basename(json_path)} dataset." )
+    the_logger.debug(f"There are {len(dict_to_use)} components being build from the {os.path.basename(source_path)} template reading the {os.path.basename(json_project_path)} dataset." )
 
 
     # iterate
