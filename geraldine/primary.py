@@ -7,8 +7,8 @@ import traceback
 import logging
 
 # setup logs
-util.create_logger('app_logger', to_file=False)
-the_logger = logging.getLogger("app_logger")
+util.create_logger('geri_logger', to_file=False)
+the_logger = logging.getLogger("geri_logger")
 
 
 # editable configs until config file functionality is implemented
@@ -123,6 +123,7 @@ def process(in_dir):
                         "template_filename": name,
                         "source_dir_name": source_dir_name,
                         "destination_dir_name": destination_dir_name,
+                        "project_root_src_dir": os.path.join(root_dir,source_dir_name),
                         "modules": modules
                     }
 

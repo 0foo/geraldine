@@ -5,12 +5,13 @@ from pprint import pprint
 from geraldine import util
 import copy
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, DictLoader
-
+import logging
 
 environment = jinja2.Environment()
 
 remove_extensions=['jinja']
 
+the_logger = logging.getLogger("geri_logger")
 
 def module_apply(processor_data):
     frontmatter = processor_data["frontmatter"]
@@ -19,6 +20,7 @@ def module_apply(processor_data):
     original_template_content_string = processor_data["template_content_string"]
     processor_data["template_content_string"] = processor_data["merged_template"]
     project_root_path = processor_data["project_root_path"]
+    project_root_src_dir = processor_data["project_root_src_dir"]
 
     if not isinstance(processor_list, list):
         processor_list = [processor_list]
@@ -45,9 +47,10 @@ def geraldine(in_data):
     project_root_path = in_data["project_root_path"]
     destination_dir_name = in_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
+    project_root_src_dir = in_data["project_root_src_dir"]
     
     try:
-        json_file_path = util.find_file(json_path, template_dir, project_root_path) # the json file
+        json_file_path = util.find_file(json_path, template_dir, project_root_src_dir) # the json file
     except Exception as e:
         raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {source_path}")
 
@@ -68,7 +71,7 @@ def geraldine(in_data):
     else:
          start_key_list = []
     dict_to_use = util.dict_lookup_function(json_data, start_key_list)
-    print(f"There are {len(dict_to_use)} components being build from the {os.path.basename(source_path)} template reading the {os.path.basename(json_path)} dataset." )
+    the_logger.debug(f"There are {len(dict_to_use)} components being build from the {os.path.basename(source_path)} template reading the {os.path.basename(json_path)} dataset." )
 
 
     # iterate

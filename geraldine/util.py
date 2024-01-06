@@ -179,11 +179,23 @@ def replace_path_base(original_path, source_dir, destination_dir):
 
     return new_path
 
+
+
+# should be an os independent way to join two absolute paths, os.path.join will not do it.
+def join_two_absolute_paths(path1, path2):
+    from pathlib import Path
+    path1 = Path(path1)
+    path2 = Path(path2)
+    file_path = path1 / path2.relative_to(path2.anchor)
+    return str(file_path)
+
+
+
 # finds a file, if file is relative will use relative to the base_path, otherwise if absolute will return absolute file
 def find_file(file_path, base_path=None, root_path=None):
     # if file path and root_path, overwrite absolute root
-    if  os.path.isabs(file_path) and root_path:
-        file_path = os.path.join(root_path, file_path)
+    if os.path.isabs(file_path) and root_path:
+        file_path = join_two_absolute_paths(root_path, file_path)
 
     # If not absolute and base_path, start relative search from the base_path
     if not os.path.isabs(file_path) and base_path:

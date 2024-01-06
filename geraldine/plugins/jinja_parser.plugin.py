@@ -5,7 +5,7 @@ from geraldine import util
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, DictLoader
 import logging
 
-the_logger = logging.getLogger("app_logger")
+the_logger = logging.getLogger("geri_logger")
 
 environment = jinja2.Environment()
 
@@ -22,6 +22,7 @@ def geraldine(processor_data):
     project_root_path = processor_data["project_root_path"]
     destination_dir_name = processor_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
+    project_root_src_dir = processor_data["project_root_src_dir"]
     json_data = {}
 
     if "start_key" in frontmatter:
@@ -33,7 +34,7 @@ def geraldine(processor_data):
         json_path = frontmatter["json_path"]
 
         try:
-            json_file_path = util.find_file(json_path, source_template_dir, project_root_path)
+            json_file_path = util.find_file(json_path, source_template_dir, project_root_src_dir)
         except Exception as e:
             raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {template_path}.")
         
