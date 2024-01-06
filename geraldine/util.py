@@ -193,7 +193,7 @@ def find_file(file_path, base_path=None, root_path=None):
     if os.path.exists(file_path):
         return file_path
     else:
-        raise FileNotFoundError()
+        raise FileNotFoundError(file_path)
     
 def is_int(key):
     try:
