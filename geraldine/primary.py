@@ -2,25 +2,27 @@ import sys
 import os
 import pathlib
 import shutil
-from geraldine import util
 import traceback
 import logging
-
-# setup logs
-util.create_logger('geri_logger', to_file=False)
-the_logger = logging.getLogger("geri_logger")
-
-
-# editable configs until config file functionality is implemented
-destination_dir_name="geri_dist"
-source_dir_name = "geri_src"
-max_depth=10
-priority_directories=[
-    "includes"
-]
+import pkg_resources
+import yaml
+from geraldine import util
+from geraldine.GeriConfigManager import GeriConfigManager
 
 cwd = os.getcwd()
 root_dir = cwd
+
+the_configs = GeriConfigManager()
+
+source_dir_name = the_configs.geri_src_dir_name
+destination_dir_name = the_configs.geri_dest_dir_name
+priority_directories = the_configs.priority_directories
+max_depth = the_configs.max_directory_depth
+
+# setup logs
+util.create_logger('geri_logger')
+the_logger = logging.getLogger("geri_logger")
+
 source_dir =  os.path.join(cwd, source_dir_name)
 destination_dir = os.path.join(cwd, destination_dir_name)
 
@@ -31,7 +33,7 @@ modules={}
 
 def get_info():
     return {
-        "install location" : script_dir,
+        "install location" : script_dir, 
         "plugin path" : plugin_path,
         "destination dir" : destination_dir
     }
@@ -43,7 +45,15 @@ def list_plugins():
     return files
 
 def create_geri_src():
+    # create source dir
     util.create_dir(source_dir)
+    # create geraldine dir
+    util.create_dir(os.path.join(cwd, '.geraldine'))
+    # create config file
+    config_seed_file = util.get_file_in_wheel('geraldine', 'seed_config_file.yaml')
+    util.write_file(os.path.join(cwd, '.geraldine', 'config.yaml'), config_seed_file)
+    # create plugin directory
+    util.create_dir(os.path.join(cwd, '.geraldine', 'plugins'))
 
 def load_modules():
     for module in util.depth_first_dir_walk(plugin_path, max_depth=0):
@@ -66,10 +76,10 @@ def run():
         the_dir = os.path.join(source_dir, dir_item)
         if os.path.exists(the_dir):
             process(the_dir)
-            print(f"Priority directory built: {the_dir}")
+            the_logger.debug(f"Priority directory built: {the_dir}")
 
     process(source_dir)
-    print(f"Source directory built: {source_dir}")
+    the_logger.debug(f"Source directory processed successfully: {source_dir}")
 
 
 

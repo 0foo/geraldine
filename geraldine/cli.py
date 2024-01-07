@@ -81,7 +81,11 @@ def run():
         
         util.write_file(lockfile_path, "running")
         print(f"Watcher lockfile created: {lockfile_path}")
-        primary.run()
+        try:
+            primary.run()
+        except Exception as e:
+            util.delete_file(lockfile_path)
+            raise(e)
 
 
         print(f"Watching directory: {source_dir} \nPress Ctrl+C to stop: ")

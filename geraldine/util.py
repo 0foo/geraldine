@@ -12,9 +12,6 @@ import sys
 from watchdog.events import FileSystemEventHandler
 
 
-
-
-
 def destination_file_name_parser(filename_string, json_file):
     pattern = r"{{(.*?)}}"
     
@@ -118,9 +115,15 @@ def create_dir(dir, gitkeep=False):
         file.close()
 
 def write_file(file_path, content):
-    """Write content to a file specified by file_path."""
+    """Write content to a file specified by file_path. (will overwrite!!)"""
     with open(file_path, 'w') as file:
         file.write(content)
+
+
+def read_file(file_path):
+    """Read content from a file specified by file_path."""
+    with open(file_path, 'r') as file:
+        return file.read()
 
 def file_exists(file_path):
     """Check if a file exists at the given file_path."""
@@ -230,76 +233,6 @@ def dict_lookup_function(input_dict, lookup_list):
     return current_dict
 
 
-# def start_simple_server(port=8000, directory=None):
-#     import http.server
-#     import socketserver
-
-
-#     if directory:
-#         os.chdir(directory)
- 
-#     directory = os.getcwd()
-
-#     # Create an HTTP request handler
-#     handler = http.server.SimpleHTTPRequestHandler
-
-#     # Create the HTTP server
-#     with socketserver.TCPServer(("", port), handler) as httpd:
-#         print(f"\nServing from directory root: {directory}")
-#         print(f"Starting HTTP server at http://localhost:{port}")
-#         # Start serving requests
-#         httpd.serve_forever()
-
-def start_simple_server(port=8000, directory=None):
-    import http.server
-    import socketserver
-
-    class ReusableTCPServer(socketserver.TCPServer):
-        allow_reuse_address = True
-
-    if directory:
-        os.chdir(directory)
- 
-    directory = os.getcwd()
-
-
-    # Create an HTTP request handler
-    handler = http.server.SimpleHTTPRequestHandler
-
-    # Create the HTTP server with ReusableTCPServer
-    with ReusableTCPServer(("", port), handler) as httpd:
-        print(f"\nServing from directory root: {os.getcwd()}")
-        print(f"Starting HTTP server at http://localhost:{port}")
-        httpd.serve_forever()
-
-
-# def start_simple_server(port=8000, directory=None):
-#     import http.server
-#     import socketserver
-
-#     class ReusableTCPServer(socketserver.TCPServer):
-#         allow_reuse_address = True
-#         def server_bind(self):
-#             # Set SO_LINGER to false and 0 timeout
-#             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
-#             super().server_bind()
-
-#     if directory:
-#         os.chdir(directory)
-    
-#     directory = os.getcwd()
-
-#     # Create an HTTP request handler
-#     handler = http.server.SimpleHTTPRequestHandler
-
-#     # Create the HTTP server
-#     with ReusableTCPServer(("", port), handler) as httpd:
-#         print(f"\nServing from directory root: {directory}")
-#         print(f"Starting HTTP server at http://localhost:{port}")
-#         # Start serving requests
-#         httpd.serve_forever()
-
-
 def run_command(command, source_dir):
     directory = os.path.dirname(source_dir)
     result = subprocess.run(command, shell=True, cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -398,6 +331,9 @@ def has_directory_changed(directory, n_seconds):
     return False
 
 def get_simple_server(directory, port=8000):
+    """
+        Creates a simple development server.
+    """
     import http.server
     import socketserver
     import threading
@@ -451,10 +387,15 @@ def get_simple_server(directory, port=8000):
 
     return SimpleServer(port, directory)
 
-def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=logging.INFO):
+def create_logger(name, log_file=False, to_stdout=True, level=logging.DEBUG):
+    """
+        Creates a basic logger with colors.
+    """
 
     class CustomFormatter(logging.Formatter):
-        """Logging Formatter to add colors and count warning / errors"""
+        """
+        Logging Formatter to add colors and count warning / errors
+        """
 
             # ANSI color escape sequences
         RED = "\033[1;31m"
@@ -482,7 +423,7 @@ def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=l
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
-    if to_file:
+    if log_file:
         create_dir(log_file)
         # File handler for output file
         file_handler = logging.FileHandler(log_file)
@@ -495,3 +436,75 @@ def create_logger(name, log_file="./logs", to_file=True, to_stdout=True, level=l
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(CustomFormatter())
         logger.addHandler(stream_handler)
+
+def get_file_in_wheel(package_name, resource_path):
+    """read a file from inside a wheel. do not use leading slashes."""
+    import pkg_resources
+    try:
+        with pkg_resources.resource_stream(package_name, resource_path) as f:
+            return f.read().decode('utf-8')
+            # Do something with content
+    except FileNotFoundError as e:
+        raise e
+
+
+class ConfigManager:
+    """
+    Simple config file manager to be extended for custom config manager functionality.
+    When have time, make this acceptable for more formats than yaml i.e. json, toml, etc..
+    """
+    def __init__(self):
+        self.config_file_path = None
+        self.configs={}
+        self.nonwrite_configs={}
+
+    def add_configs(self, config_dict):
+        """ 
+            Adds config dict to existing config dict and makes them attributes on the object.
+            Preferred way of adding configs.
+            Currently existing same keys will be overwritten!!!
+        """
+        if not isinstance(config_dict, dict):
+            raise Exception("Adding a new config must be a dictionary type!")
+
+        if not config_dict:
+            return
+
+        self.configs.update(config_dict)
+        for key, value in self.configs.items():
+            setattr(self, key, value)
+
+    def add_nonwrite_configs(self, nonwrite_config_dict):
+        if not isinstance(nonwrite_config_dict, dict):
+            raise Exception("Adding a new config must be a dictionary type!")
+        if not nonwrite_config_dict:
+            return
+        self.nonwrite_configs.update(nonwrite_config_dict)
+        for key, value in self.nonwrite_configs.items():
+            setattr(self, f"nw_{key}", value)
+
+    def config_file_exists(self):
+        if not os.path.exists(self.config_file_path):
+            raise Exception(f"Can't find config file!: {config_file_path}")
+
+    def make_attributes(self, some_dict):
+        """ 
+            Makes all the attributes callable with dot notation on the object for code readability
+        """
+     
+
+    def read_configs(self):
+        """
+            Load configs from a config file
+        """
+        self.config_file_exists()
+        config_settings = None
+        with open(self.config_file_path, "r") as f:
+            config_settings = yaml.safe_load(f)
+        if config_settings:
+            self.add_configs(config_settings)
+
+    def write_configs(self):
+        self.config_file_exists()
+        with open(self.config_file_path, "w") as f:
+            yaml.dump(self.configs, f)
