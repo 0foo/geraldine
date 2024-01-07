@@ -105,7 +105,6 @@ def geraldine(in_data):
     if custom_filter_file:
         load_custom_filters_from_file(env, custom_filter_file)
     
-    print(env.filters)
     jinja_template = env.get_template('the_template')
 
     
