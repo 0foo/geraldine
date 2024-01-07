@@ -39,6 +39,25 @@ def module_apply(processor_data):
 def process_file_name_key(filename):
     pass
 
+def get_custom_filter_file(frontmatter, project_root_path, template_path):
+    if "custom_filter_file" in frontmatter:
+        custom_filter_file = frontmatter["custom_filter_file"]
+        try:
+            return util.find_file(custom_filter_file, project_root_path, project_root_path)
+        except Exception as e:
+            raise FileNotFoundError(f"Cant find custom_filter_file {e} defined in front matter of: {template_path}.")
+    return None
+        
+def load_custom_filters_from_file(env, file_path):
+    namespace = {}
+    with open(file_path, 'r') as file:
+        exec(file.read(), namespace)
+    # Add the functions defined in the file to the Jinja environment
+    for name, func in namespace.items():
+        if callable(func):
+            env.filters[name] = func
+
+
 def geraldine(in_data):
     frontmatter = in_data["frontmatter"]
     json_project_path = frontmatter["json_project_path"]
@@ -48,7 +67,8 @@ def geraldine(in_data):
     destination_dir_name = in_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
     project_root_src_dir = in_data["project_root_src_dir"]
-    
+    custom_filter_file = get_custom_filter_file(frontmatter, project_root_path, source_path)
+
     try:
         json_file_path = util.find_file(json_project_path, template_dir, project_root_src_dir) # the json file
     except Exception as e:
@@ -81,6 +101,11 @@ def geraldine(in_data):
         DictLoader({'the_template': content}),
         FileSystemLoader(destination_root_path)
     ]))
+
+    if custom_filter_file:
+        load_custom_filters_from_file(env, custom_filter_file)
+    
+    print(env.filters)
     jinja_template = env.get_template('the_template')
 
     
