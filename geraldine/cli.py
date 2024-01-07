@@ -1,55 +1,61 @@
 #!/usr/bin/env python3
 import argparse
-from geraldine import primary
+from geraldine import processor
 from pprint import pprint
 from geraldine import util
 import time
 import sys
 import os
 import traceback
+import logging
+from geraldine.GeriStateManager import GeriStateManager
 
-source_dir = primary.source_dir
-dest_dir = primary.destination_dir_name
+
 lockfile_path = "/tmp/.geriwatch"
+the_state = GeriStateManager()
+dest_dir = the_state.data.dest_dir
+source_dir = the_state.data.src_dir
+logger_name = the_state.data.logger_name
+geraldine_directory = the_state.data.geraldine_directory
+custom_plugins = the_state.configs.custom_plugin_directories
+config_file = the_state.config_file_path
+
+util.create_logger(logger_name)
+the_logger = logging.getLogger(logger_name)
 
 
 def run():
-    # Create the top-level parser
     parser = argparse.ArgumentParser(prog='geri')
     subparsers = parser.add_subparsers(dest='command', help='commands')
-
-    # Create a subparser for the 'info' command
     info_parser = subparsers.add_parser('info', help='Show locations/plugins')
-
-    # Create a subparser for the 'init' command
     init_parser = subparsers.add_parser('init', help='Create source directory for geraldine templates.')
-
-      # Create a subparser for the 'init' command
     watch_parser = subparsers.add_parser('watch', help='Watch geraldine source folder and rebuild on change.')
-
-
-    # Create a subparser for the 'serve' command
     serve_parser = subparsers.add_parser('serve', help='Start simple web development server in current directory.')
     serve_parser.add_argument("port", nargs='?', type=int, default=8000, help="Specify the port on which to run the server. Default is 8000.")
-
-    # Parse the arguments
     args = parser.parse_args()
 
     # Execute based on the command
     if args.command == 'info':
-        print("Setup info")
-        for key,value in primary.get_info().items():
-            print(f"\t{key}: {value}")
-        print("Available plugins:")
-        for item in primary.list_plugins():
-            print(f"\t{item}") 
+        the_state.print()
         exit()
-
 
     # init
     elif args.command == 'init':
-        print(f"Creating source folder: {primary.source_dir}")
-        primary.create_geri_src()
+        if os.path.exists(geraldine_directory):
+            raise Exception(f"Geraldine directory already exists: {source_dir}")
+
+        # create source dir
+        util.create_dir(source_dir)
+        
+        # create geraldine dir
+        util.create_dir(geraldine_directory)
+        # create custom plugins directories
+        for custom_plugin in custom_plugins:
+            util.create_dir(custom_plugin)
+
+        # config file
+        util.touch(config_file)
+        the_state.write_configs()
         exit()
 
     # serve
@@ -82,7 +88,7 @@ def run():
         util.write_file(lockfile_path, "running")
         print(f"Watcher lockfile created: {lockfile_path}")
         try:
-            primary.run()
+            processor.run(the_state, the_logger)
         except Exception as e:
             util.delete_file(lockfile_path)
             raise(e)
@@ -94,7 +100,7 @@ def run():
             while True:
                 directory_changed = util.has_directory_changed(source_dir, 2)
                 if directory_changed:
-                    primary.run()
+                    processor.run(the_state, the_logger)
                     print("\n")
 
         except KeyboardInterrupt:
@@ -104,7 +110,7 @@ def run():
         print(f"Watcher lockfile deleted: {lockfile_path}")
         exit()
 
-    primary.run()
+    processor.run(the_state, the_logger)
 
 
 if __name__ == "__main__":

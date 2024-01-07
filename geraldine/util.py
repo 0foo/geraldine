@@ -9,6 +9,7 @@ from time import sleep
 import time
 import logging
 import sys
+import copy
 from watchdog.events import FileSystemEventHandler
 
 
@@ -91,12 +92,6 @@ def get_front_matter(file_path):
     })
     
 
-def import_module_from_path(path):
-    module_name = os.path.basename(path).split('.')[0]
-    module_spec = importlib.util.spec_from_file_location(module_name, path)
-    module = importlib.util.module_from_spec(module_spec)
-    module_spec.loader.exec_module(module)
-    return module
 
 def delete_dir(dirname, error=False):
     try:
@@ -113,6 +108,10 @@ def create_dir(dir, gitkeep=False):
         file = open(dir + "/.gitkeep", 'w')
         file.write('')
         file.close()
+
+def touch(file_path):
+    with open(file_path, 'w') as file:
+        pass
 
 def write_file(file_path, content):
     """Write content to a file specified by file_path. (will overwrite!!)"""
@@ -418,7 +417,7 @@ def create_logger(name, log_file=False, to_stdout=True, level=logging.DEBUG):
             log_fmt = self.FORMATS.get(record.levelno)
             formatter = logging.Formatter(log_fmt)
             return formatter.format(record)
-
+        
     """Function to setup a logger."""
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -437,6 +436,9 @@ def create_logger(name, log_file=False, to_stdout=True, level=logging.DEBUG):
         stream_handler.setFormatter(CustomFormatter())
         logger.addHandler(stream_handler)
 
+def logger_exists(name):
+    return name in logging.Logger.manager.loggerDict
+
 def get_file_in_wheel(package_name, resource_path):
     """read a file from inside a wheel. do not use leading slashes."""
     import pkg_resources
@@ -448,50 +450,54 @@ def get_file_in_wheel(package_name, resource_path):
         raise e
 
 
-class ConfigManager:
+class Databag:
+    def __init__(self):
+        self.data={}
+
+    def add(self, some_dict):
+
+        if not isinstance(some_dict, dict):
+            raise Exception("Adding a new data variable must be a dictionary type!")
+
+        if not some_dict:
+            return
+
+        # set data on dict
+        self.data.update(some_dict)
+
+        # set attribute on the object for clean access
+        for key, value in self.data.items():
+            setattr(self, key, value)
+
+    def remove(self, key):
+        if hasattr(self, key):
+            del self.key
+
+        if key in self.data:
+            del self.data[key]
+
+class StateManager:
     """
-    Simple config file manager to be extended for custom config manager functionality.
+    Simple state manager to be extended for custom state manager functionality.
+    Note: 
+        self.config => can be written to a file
+        self.data => just in memory datastore for program run
     When have time, make this acceptable for more formats than yaml i.e. json, toml, etc..
     """
     def __init__(self):
         self.config_file_path = None
-        self.configs={}
-        self.nonwrite_configs={}
+        self.configs = Databag()
+        self.data= Databag()
 
-    def add_configs(self, config_dict):
-        """ 
-            Adds config dict to existing config dict and makes them attributes on the object.
-            Preferred way of adding configs.
-            Currently existing same keys will be overwritten!!!
-        """
-        if not isinstance(config_dict, dict):
-            raise Exception("Adding a new config must be a dictionary type!")
+    def add_configs(self, config_dict):    
+        self.configs.add(config_dict)
 
-        if not config_dict:
-            return
-
-        self.configs.update(config_dict)
-        for key, value in self.configs.items():
-            setattr(self, key, value)
-
-    def add_nonwrite_configs(self, nonwrite_config_dict):
-        if not isinstance(nonwrite_config_dict, dict):
-            raise Exception("Adding a new config must be a dictionary type!")
-        if not nonwrite_config_dict:
-            return
-        self.nonwrite_configs.update(nonwrite_config_dict)
-        for key, value in self.nonwrite_configs.items():
-            setattr(self, f"nw_{key}", value)
+    def add_data(self, nonwrite_config_dict):
+        self.data.add(nonwrite_config_dict)
 
     def config_file_exists(self):
         if not os.path.exists(self.config_file_path):
-            raise Exception(f"Can't find config file!: {config_file_path}")
-
-    def make_attributes(self, some_dict):
-        """ 
-            Makes all the attributes callable with dot notation on the object for code readability
-        """
-     
+            raise Exception(f"Can't find config file!: {self.config_file_path}")
 
     def read_configs(self):
         """
@@ -506,5 +512,12 @@ class ConfigManager:
 
     def write_configs(self):
         self.config_file_exists()
+        the_out = copy.deepcopy(self.configs.data)
+        if "descriptions" in the_out:
+            descriptions = the_out.pop("descriptions")
+            descriptions = dict(sorted(descriptions.items()))
         with open(self.config_file_path, "w") as f:
-            yaml.dump(self.configs, f)
+            for item, value in descriptions.items():
+                f.write(f"# {item}: {value} \n")
+            f.write("\n")
+            yaml.dump(the_out, f)

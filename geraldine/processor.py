@@ -1,89 +1,39 @@
-import sys
 import os
-import pathlib
-import shutil
 import traceback
 import logging
-import pkg_resources
-import yaml
 from geraldine import util
-from geraldine.GeriConfigManager import GeriConfigManager
-
-cwd = os.getcwd()
-root_dir = cwd
-
-the_configs = GeriConfigManager()
-
-source_dir_name = the_configs.geri_src_dir_name
-destination_dir_name = the_configs.geri_dest_dir_name
-priority_directories = the_configs.priority_directories
-max_depth = the_configs.max_directory_depth
-
-# setup logs
-util.create_logger('geri_logger')
-the_logger = logging.getLogger("geri_logger")
-
-source_dir =  os.path.join(cwd, source_dir_name)
-destination_dir = os.path.join(cwd, destination_dir_name)
-
-script_path = os.path.abspath(__file__)
-script_dir = os.path.dirname(script_path)
-plugin_path = os.path.join(script_dir, 'plugins')
-modules={}
-
-def get_info():
-    return {
-        "install location" : script_dir, 
-        "plugin path" : plugin_path,
-        "destination dir" : destination_dir
-    }
 
 
-def list_plugins():
-    files = [f for f in os.listdir(plugin_path) 
-        if os.path.isfile(os.path.join(plugin_path, f))]
-    return files
+def run(the_state, the_logger):  
+    source_dir = the_state.data.src_dir
+    destination_dir = the_state.data.dest_dir
+    priority_directories =  the_state.data.priority_directories
 
-def create_geri_src():
-    # create source dir
-    util.create_dir(source_dir)
-    # create geraldine dir
-    util.create_dir(os.path.join(cwd, '.geraldine'))
-    # create config file
-    config_seed_file = util.get_file_in_wheel('geraldine', 'seed_config_file.yaml')
-    util.write_file(os.path.join(cwd, '.geraldine', 'config.yaml'), config_seed_file)
-    # create plugin directory
-    util.create_dir(os.path.join(cwd, '.geraldine', 'plugins'))
-
-def load_modules():
-    for module in util.depth_first_dir_walk(plugin_path, max_depth=0):
-        if module.name.endswith('.plugin.py'):
-            the_module = util.import_module_from_path(module.path)
-            modules[module.name[:-10]] = the_module
-            
-
-def run():  
     if not os.path.exists(source_dir):
         raise Exception(f"Can't find source directory: {source_dir}")
-
-    load_modules()
 
     util.create_dir(destination_dir)
     util.clear_directory(destination_dir)
 
+    for priority_directory in priority_directories:
+        if os.path.exists(priority_directory):
+            process(priority_directory,the_state,the_logger)
+            the_logger.debug(f"Priority directory built: {priority_directory}")
+        else:
+            the_logger.debug(f"Can't find priority directory: {priority_directory}")
 
-    for dir_item in priority_directories:
-        the_dir = os.path.join(source_dir, dir_item)
-        if os.path.exists(the_dir):
-            process(the_dir)
-            the_logger.debug(f"Priority directory built: {the_dir}")
-
-    process(source_dir)
+    process(source_dir,the_state,the_logger)
     the_logger.debug(f"Source directory processed successfully: {source_dir}")
 
+def process(in_dir, the_state, the_logger):
+    max_depth = the_state.configs.max_directory_depth
+    source_dir = the_state.data.src_dir
+    destination_dir = the_state.data.dest_dir
+    source_dir_name = the_state.configs.geri_src_dir_name
+    destination_dir_name = the_state.configs.geri_dest_dir_name
+    modules = the_state.data.modules
+    root_dir=the_state.data.root_directory
 
-
-def process(in_dir):
     for location in util.depth_first_dir_walk(in_dir, max_depth=max_depth):
         name = location.name
         old_path = util.remove_subpath(location.path, source_dir)
@@ -97,7 +47,7 @@ def process(in_dir):
             util.create_dir(new_path)
             continue
         
-        # is_sym
+        # is_sym, NOTE: is this needed?
         if location.is_symlink():
             continue
 
