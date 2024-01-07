@@ -56,6 +56,11 @@ def run():
         # config file
         util.touch(config_file)
         the_state.write_configs()
+
+        # custom jinja filter file
+        cust_jinj_filt = os.path.join(geraldine_directory, "custom_jinja_filters.py")
+        util.touch(cust_jinj_filt)
+
         exit()
 
     # serve

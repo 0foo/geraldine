@@ -83,9 +83,12 @@ class GeriStateManager(StateManager):
         # load built in plugins
         load_module_from_dir(self.data.built_in_plugin_path, modules)
 
+
         # load custom plugins from config files
+        
         for plugin_dir in self.configs.custom_plugin_directories:
-            load_module_from_dir(plugin_dir, modules)
+            if os.path.exists(plugin_dir):
+                load_module_from_dir(plugin_dir, modules)
 
         return modules
 

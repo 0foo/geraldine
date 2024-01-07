@@ -84,7 +84,9 @@ def process(in_dir, the_state, the_logger):
                         "source_dir_name": source_dir_name,
                         "destination_dir_name": destination_dir_name,
                         "project_root_src_dir": os.path.join(root_dir,source_dir_name),
-                        "modules": modules
+                        "modules": modules,
+                        "configs": the_state.configs.data,
+                        "app_data": the_state.data.data
                     }
 
 

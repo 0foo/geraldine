@@ -23,6 +23,7 @@ def geraldine(processor_data):
     destination_dir_name = processor_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
     project_root_src_dir = processor_data["project_root_src_dir"]
+    
     json_data = {}
 
     if "start_key" in frontmatter:

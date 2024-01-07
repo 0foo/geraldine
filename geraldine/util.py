@@ -452,7 +452,7 @@ def get_file_in_wheel(package_name, resource_path):
 
 class Databag:
     def __init__(self):
-        self.data={}
+        self.data={} # NEVER ADD TO THIS DICT, ALWAYS USE ADD FUNCTION
 
     def add(self, some_dict):
 

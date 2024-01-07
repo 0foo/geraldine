@@ -168,13 +168,6 @@ geri info
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip when the hackers/spammers go away
-* Make config files
-    * a user folder: ~/.geraldine 
-    * also project level config files, the code will bubble up looking for the first .geraldine config file match, and use ~/.ger.. as default if none
-    * config file for declaring custom things like max-depth, input/output dir, etc.
-    * folder for custom plugins
-    * priority directories specification
-* Add an info variables to the plugin so it outpus info
 * the functionality to point the cli at a template with/without front matter and output result to a specified parameter just wtih cli
 * Refactor post processing block into its own spot
 * Implement yaml and toml processors
