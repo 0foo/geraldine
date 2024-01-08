@@ -1,10 +1,7 @@
 # Geraldine: a static component generator
 
 ## About
-* Static site generators are kind of heavy weight and specific to creating static sites
-* So many things in computer science simply require transforming from one format to another, with some possible tweaks.
-* I always loved static site generaters but wanted something a little more flexible, that could just essentially process files how I wanted them to be processed and output a transformed file.
-* This is a static component generator. It takes all the things I liked about static site generators like templating, live reload, creating parallel distribution directories, front matter, dev servers, includes, etc. and makes a system that will not only create static sites but also do much more.  
+* This is a static component generator. It takes data and templates with front matter and outputs a processed file.  
 * At a high level it's essentially a file processor with bells and whistles.  You put files through one or more processors, i.e. a pipeline, and write the output to disk.
 * Use cases:
     * Transpiling to HTML: Convert markdown, jinja, restructured text, TOML, other templating langs -> HTML
@@ -13,19 +10,20 @@
         * This also allows one jinja template that can iterate over many elements in json. 
     * Extracting smaller portions of json from large hunks of json.
     * Extracting tags and converting those tags to what they actually represent in the file.
-    * Adding cool tweaks to files, like removing any blank lines, indenting entire files 
+    * Adding cool tweaks to files, like removing any blank lines, indenting entire files, prettifying code
+    * Minimizing, obfuscating
     * Generating your actual entire website
     * Any which way you want to manhandle a file, you can do it, just write a plugin.
-
     
-
 ## Simple example
 * This combines a json template and a jinja template and outputs the result and removes all the blank lines.
 
 * The jinja template file:
 ```
 ---
-processer: [jinja_parser, remove_blank_lines]
+processer: [jinja_parser, remove_blank_lines]* Static site generators are kind of heavy weight and specific to creating static sites
+* So many things in computer science simply require transforming from one format to another, with some possible tweaks.
+* I always loved static site generaters but wanted something a little more flexible, that could just essentially process files how I wanted them to be processed and output a transformed file.
 json_path: /somedir/data/myjson.json
 ---
 <div> {{some_variable}}</div>
@@ -56,11 +54,10 @@ Foo bar!!
     * Then it removed the new lines.
     * The processers operate in order, so it's like a pipeline of one transformation applied, then that data is passed to the next processer.
 
-* Note: this is literally jinja but with front matter and a pipeline to give it more POWAH!
+* Note: this is literally jinja but with front matter and a pipeline to give it more power!
 
 
 ## Directory generation
-
 * Geri has a parent directory with a `geri_src` and a `geri_dest` directory. (names are customizable)
 
 * When `geri` command is run geri iterates through every directory underneath the `geri_src` (or what dirname you specify) in which it was run, processes the and rebuilds the exact directory structure in the sibling `geri_dist` (or what dirname you specify) folder.
@@ -92,79 +89,51 @@ Foo bar!!
 * `poetry run python3 cli.py -h`
 
 ## CLI
-```bash
-usage: geri [-h] {info,init,watch,serve} ...
-
-positional arguments:
-  {info,init,watch,serve}
-                        commands
-    info                Show install location
-    init                Create source directory for geraldine templates.
-    watch               Watch geraldine source folder and rebuild on change.
-    serve               Start simple web development server in current directory.
-
-options:
-  -h, --help            show this help message and exit
-
-
-geri info
-    Setup info
-        install location: /home/nick/.local/lib/python3.10/site-packages/geraldine
-        plugin path: /home/nick/.local/lib/python3.10/site-packages/geraldine/plugins
-    Available plugins:
-        simple_processor.plugin.py
-        jinja_parser.plugin.py
-        jinja_file_parser.plugin.py
-```
-
+* geri has a cli.  `geri --help`
 
 
 ## Plugins
+* In geraldine: processor == module == plugin
+    * plugin is what the files are called
+    * module is whats called in the code of the system
+    * processor is what it's called in the front matter of template files
+    * they all refer to the same thing though.
 
 * Geri is built with a plugin system, so if you want to create a plugin just drop it into the plugin path with extension: .plugin.py 
 
-* see plugin folder: [./geraldine/plugins](./geraldine/plugins)
+* see plugin folder for examples: [./geraldine/plugins](./geraldine/plugins)
 
 * The name of the plugin (without: .plugin.py) will be what you set in the `processer` field in the front matter
 
 * The plugin needs a top level function with the name `geraldine` that gets called by the main system.
 
+* There is a lot of data passed to the plugins geraldine function. You can run a print statement or json.dumps in a custom plugin on it to see what all is being passed.
+    * Going to add more documentation on this at some point
 
-* The data passed to geraldine(data) function looks like this:
-```
-{   
-    'destination_path': '/tmp/geri_test/dist/test1/test.jinja.html',
-    'frontmatter': {   'extension': 'html',
-                       'filename_key': 'class.0.name',
-                       'json_path': '/home/nick/bash_shortcuts/in_prog/char_gen/data/json/classes/all_classes.json',
-                       'processor': 'jinja_file_parser'},
-    'src_path': '/tmp/geri_test/geri_src/test1/test.jinja.html',
-    'template_content': '<div>{{class.name}}</div>\n\n',
-    'template_filename': 'test.jinja.html'
-}
+* What ever you return from the function will go through the other processors you've specified and then be written to the output file in destination folder
+* If you return nothing, no file will be written as it's assumed you're creating the file within the plugin yourself, and geri will move on to the next file in the source directory.
 
-```
-
-* What ever you return from the function will be written to the output file in destination folder
-* If you return nothing, no file will be written as it's assumed you're creating the file within the plugin yourself.
 * Declare a top level variable to remove an extension from the file name: remove_extensions=['jinja'] 
 
+* If you run `geri init` in your project folder it will create a .geraldine folder with a config file and a custom plugins directory.
 
-## Plugins so far
+## Built in plugins so far
 * run `geri info`
 
 ## Priority directories
 * For things like includes, you can define priority directories.
 * This will process everything the same except these directories will be processed first. 
 * This allows you to define a jinja template to process and use the include tag with an already built directory: {% include sometemplate.html %} 
-* The currently only implemented priority directory so far is geri_src/includes. 
-* Going to make this customizable to add any you want when I have the bandwidth
+* The currently builtin priority directory geri_src/includes, but you can specify with the config file built with `geri init`. 
 
 ## Caveats
-* I'm just a solo person working on this so far.  And this is just a single thread working on a single file at a time. 
-* So extreme use cases like massive numbers of files might be slow (have't tested), workarounds include making several source folders.
-* This loads the whole file into memory to process, so might be limited by process memory limits or system limits or architecture limits if the file is really big(2Gi+).
-* There's ways I've thought of to work around these like having a queue and workers and tags for large files to trigger line by line processing, but don't have the time presently.
+* This is just a single thread working on a single file at a time that is loaded into memory. 
+    * Have not tested extreme use cases like massive numbers of files or gigantic files.
+    * I'm working with over a thousand files in one project and having no issues.  
+    * I don't see why giant files should be much of an issue as long as they're under your allowed process memory size 
+    * There's ways I've thought of to optimize this like having a queue and workers and tags for large files to trigger line by line processing, but don't have the time presently.
+* I have not tested this on any OS but Ubuntu 22
+
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip when the hackers/spammers go away
@@ -172,3 +141,4 @@ geri info
 * Refactor post processing block into its own spot
 * Implement yaml and toml processors
 * Better docs with examples
+* add documentation functionality to processor/module/plugins 
