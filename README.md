@@ -50,6 +50,7 @@ Foo bar!!
 * The processor field has two items: jinja_parser, and remove_blank_lines
     * Therefore it process the jinja template, applying the json_path for the data file to apply to the jinja template
     * Then it removed the new lines.
+    * Then, since that was the last processor, it wrote it to the same directory location except under the distribution directory.
     * The processers operate in order, so it's like a pipeline of one transformation applied, then that data is passed to the next processer.
 
 * Note: this is literally jinja but with front matter and a pipeline to give it more power!
@@ -68,7 +69,9 @@ Foo bar!!
     * Also, Please do not customize the geri destination folder in the config file to a folder with important data in it, as it will be wiped!!!
 
 ## More Examples
-* see [./geraldine/examples](./geraldine/examples) 
+* [./geraldine/examples](./geraldine/examples) 
+* [https://github.com/0foo/character_generator](https://github.com/0foo/character_generator)
+    * see geri_src/components directory
 
 ## Install
 
