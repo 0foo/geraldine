@@ -130,7 +130,7 @@ Foo bar!!
     * I'm working with over a thousand files in one project and having no issues.  
     * I don't see why giant files should be much of an issue as long as they're under your allowed process memory size 
     * There's ways I've thought of to optimize this like having a queue and workers and tags for large files to trigger line by line processing, but don't have the time presently.
-* I have not tested this on any OS but Ubuntu 22
+* I have not tested this on any OS but Ubuntu 22, although tried to code it to be OS agnostic
 
 
 ## To Do:
