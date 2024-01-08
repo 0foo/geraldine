@@ -109,12 +109,13 @@ def geraldine(in_data):
 
     
     for dict_item in dict_to_use:
-            
+
             # process filename template
             jinja_filename_template = environment.from_string(filename_key)
             filename = jinja_filename_template.render(dict_item)
 
             # process content template
+            dict_item["geraldine_full_data"] = dict_item
             merged_template = jinja_template.render(dict_item)
             in_data["merged_template"] = merged_template
 

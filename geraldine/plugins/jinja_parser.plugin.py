@@ -81,5 +81,6 @@ def geraldine(processor_data):
         load_custom_filters_from_file(env, custom_filter_file)
 
     template = env.get_template('the_template') 
+    json_data["geraldine_full_data"] = json_data
     out =  template.render(json_data)
     return out
