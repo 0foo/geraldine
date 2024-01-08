@@ -21,7 +21,7 @@
 * The jinja template file:
 ```
 ---
-processer: [jinja_parser, remove_blank_lines]* Static site generators are kind of heavy weight and specific to creating static sites
+processer: [jinja_parser, remove_blank_lines]
 json_path: /somedir/data/myjson.json
 ---
 <div> {{some_variable}}</div>
