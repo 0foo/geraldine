@@ -62,6 +62,10 @@ Foo bar!!
 
 * Any files with front matter will be parsed according to the front matter specifications. If no front matter the file will be copied exactly with no processing. 
 
+* Important: `geri_dest` (or whatever your custom destination directory) is continually completely wiped. 
+    * Nothing in here is supposed to modified except via `geri_src`.  
+    * `geri_dest` is supposed to be an ephemeral mirror of `geri_src`
+    * Also, Please do not customize the destination folder to a folder with important data in it, as it will be wiped!!!
 
 ## More Examples
 * see [./geraldine/examples](./geraldine/examples) 
