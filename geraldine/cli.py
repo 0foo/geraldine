@@ -11,7 +11,7 @@ import logging
 from geraldine.GeriStateManager import GeriStateManager
 
 
-lockfile_path = "/tmp/.geriwatch"
+lockfile_path = os.path.join(os.getcwd(), ".geriwatch")
 the_state = GeriStateManager()
 dest_dir = the_state.data.dest_dir
 source_dir = the_state.data.src_dir
@@ -20,7 +20,10 @@ geraldine_directory = the_state.data.geraldine_directory
 custom_plugins = the_state.configs.custom_plugin_directories
 config_file = the_state.config_file_path
 
-util.create_logger(logger_name)
+util.create_logger(
+        logger_name, 
+        log_level=the_state.configs.log_level
+    )
 the_logger = logging.getLogger(logger_name)
 
 

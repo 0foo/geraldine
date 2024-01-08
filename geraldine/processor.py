@@ -69,7 +69,7 @@ def process(in_dir, the_state, the_logger):
             if not isinstance(processor_list, list):
                 processor_list = [processor_list]
             
-
+            current_processing = ""
             for processor in processor_list:
                 if processor in modules:
                     the_processor=modules[processor]
@@ -96,6 +96,10 @@ def process(in_dir, the_state, the_logger):
                     # Note 2: Trimming down output from File Not Found exceptions, as those are relatively
                     #       easy to troubleshoot 
                     try:
+                        if name != current_processing:
+                            the_logger.debug(f"processing {name}" )
+                            current_processing = name
+
                         content = the_processor.geraldine(processor_data)
                     except FileNotFoundError as e:
                         the_logger.critical(e)

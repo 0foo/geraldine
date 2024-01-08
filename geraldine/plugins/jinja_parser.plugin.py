@@ -11,23 +11,29 @@ environment = jinja2.Environment()
 
 remove_extensions=['jinja']
 
-def get_custom_filter_file(frontmatter, project_root_path, template_path):
-    if "custom_filter_file" in frontmatter:
-        custom_filter_file = frontmatter["custom_filter_file"]
-        try:
-            return util.find_file(custom_filter_file, project_root_path, project_root_path)
-        except Exception as e:
-            raise FileNotFoundError(f"Cant find custom_filter_file {e} defined in front matter of: {template_path}.")
-    return None
+def get_custom_filter_files(frontmatter, project_root_path, template_path):
+    out=[]
+    if "custom_filter_files" in frontmatter:
+        custom_filter_files = frontmatter["custom_filter_files"]
+        if isinstance(custom_filter_files, str):
+            custom_filter_files = [custom_filter_files]
+        for custom_filter_file in custom_filter_files:
+            try:
+                the_file = util.find_file(custom_filter_file, project_root_path, project_root_path)
+                out.append(the_file)
+            except Exception as e:
+                raise FileNotFoundError(f"Cant find custom_filter_file {e} defined in front matter of: {template_path}.")
+    return out
         
-def load_custom_filters_from_file(env, file_path):
-    namespace = {}
-    with open(file_path, 'r') as file:
-        exec(file.read(), namespace)
-    # Add the functions defined in the file to the Jinja environment
-    for name, func in namespace.items():
-        if callable(func):
-            env.filters[name] = func
+def load_custom_filters_from_files(env, file_paths):
+    for file_path in file_paths:
+        namespace = {}
+        with open(file_path, 'r') as file:
+            exec(file.read(), namespace)
+        # Add the functions defined in the file to the Jinja environment
+        for name, func in namespace.items():
+            if callable(func):
+                env.filters[name] = func
 
 
 def geraldine(processor_data):
@@ -41,7 +47,7 @@ def geraldine(processor_data):
     destination_dir_name = processor_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
     project_root_src_dir = processor_data["project_root_src_dir"]
-    custom_filter_file = get_custom_filter_file(frontmatter, project_root_path, source_template_dir)
+    custom_filter_files = get_custom_filter_files(frontmatter, project_root_path, source_template_dir)
 
     
 
@@ -77,8 +83,8 @@ def geraldine(processor_data):
         FileSystemLoader(destination_root_path)
     ]))
 
-    if custom_filter_file:
-        load_custom_filters_from_file(env, custom_filter_file)
+    if custom_filter_files:
+        load_custom_filters_from_files(env, custom_filter_files)
 
     template = env.get_template('the_template') 
     json_data["geraldine_full_data"] = json_data

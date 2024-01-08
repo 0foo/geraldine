@@ -386,7 +386,7 @@ def get_simple_server(directory, port=8000):
 
     return SimpleServer(port, directory)
 
-def create_logger(name, log_file=False, to_stdout=True, level=logging.DEBUG):
+def create_logger(name, log_file=False, to_stdout=True, log_level=logging.DEBUG):
     """
         Creates a basic logger with colors.
     """
@@ -420,7 +420,17 @@ def create_logger(name, log_file=False, to_stdout=True, level=logging.DEBUG):
         
     """Function to setup a logger."""
     logger = logging.getLogger(name)
-    logger.setLevel(level)
+    
+    level_mapping = {
+        'debug': logging.DEBUG,
+        'info': logging.INFO,
+        'warning': logging.WARNING,
+        'error': logging.ERROR,
+        'critical': logging.CRITICAL
+    }
+    
+    log_level = level_mapping.get(log_level.lower(), logging.INFO)
+    logger.setLevel(log_level)
 
     if log_file:
         create_dir(log_file)
