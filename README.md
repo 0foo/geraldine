@@ -135,8 +135,8 @@ Foo bar!!
 
 ## To Do:
 * Stick it up on pypi to make it installable with pip when the hackers/spammers go away
-* the functionality to point the cli at a template with/without front matter and output result to a specified parameter just wtih cli
+* The functionality to point the cli at a template with/without front matter and output result to a specified parameter just wtih cli
 * Refactor post processing block into its own spot
-* Implement yaml and toml processors
-* Better docs with examples
-* add documentation functionality to processor/module/plugins 
+* Implement yaml and toml processors, html/json/etc. prettifiers
+* Expanded docs with more examples
+* Add documentation functionality to processor/module/plugins 
