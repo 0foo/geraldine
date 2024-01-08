@@ -22,8 +22,6 @@
 ```
 ---
 processer: [jinja_parser, remove_blank_lines]* Static site generators are kind of heavy weight and specific to creating static sites
-* So many things in computer science simply require transforming from one format to another, with some possible tweaks.
-* I always loved static site generaters but wanted something a little more flexible, that could just essentially process files how I wanted them to be processed and output a transformed file.
 json_path: /somedir/data/myjson.json
 ---
 <div> {{some_variable}}</div>
