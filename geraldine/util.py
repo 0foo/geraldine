@@ -208,7 +208,13 @@ def find_file(file_path, base_path=None, root_path=None):
         return file_path
     else:
         raise FileNotFoundError(file_path)
-    
+
+
+def replace_root_path(file_path, root_path):
+    if os.path.isabs(file_path):
+        file_path = file_path[1:]
+    return os.path.join(root_path, file_path)
+
 def is_int(key):
     try:
         int(key)

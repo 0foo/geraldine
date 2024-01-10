@@ -76,7 +76,7 @@ def geraldine(in_data):
     custom_filter_files = get_custom_filter_files(frontmatter, project_root_path, source_path)
 
     try:
-        json_file_path = util.find_file(json_project_path, template_dir, project_root_src_dir) # the json file
+        json_file_path = util.find_file(json_project_path, template_dir, project_root_path) # the json file
     except Exception as e:
         raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {source_path}")
 
