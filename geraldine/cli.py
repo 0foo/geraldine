@@ -100,11 +100,19 @@ def run():
 
         print(f"Watching directory: {source_dir} \nPress Ctrl+C to stop: ")
         try:
-            time_counter = 0
             while True:
-                directory_changed = util.has_directory_changed(source_dir, 2)
-                if directory_changed:
-                    processor.run(the_state, the_logger)
+                dir_changes = util.get_directory_changes(source_dir, 2)
+                for location in dir_changes["added"]:
+                    print("Added: " + location)
+                    processor.process_file(location, the_state, the_logger)
+                    print("\n")
+                for location in dir_changes["deleted"]:
+                    print("Deleted: " + location)
+                    util.delete_path(location)
+                    print("\n")
+                for location in dir_changes["changed"]:
+                    print("Changed: " + location)
+                    processor.process_file(location, the_state, the_logger)
                     print("\n")
 
         except KeyboardInterrupt:

@@ -100,7 +100,19 @@ def delete_dir(dirname, error=False):
         if error:
             print("Error: %s - %s." % (e.filename, e.strerror))
 
-
+def delete_path(path):
+    try:
+        if os.path.isfile(path) or os.path.islink(path):
+            # It's a file or a symlink; remove it
+            os.remove(path)
+        elif os.path.isdir(path):
+            # It's a directory; remove it and all contained files
+            shutil.rmtree(path)
+        else:
+            print(f"Path {path} is a special file (socket, FIFO, device file) and was not removed.")
+    except Exception as e:
+        print(f"Error removing {path}: {e}")
+        
 def create_dir(dir, gitkeep=False):
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -334,6 +346,28 @@ def has_directory_changed(directory, n_seconds):
     if initial_state != new_state:
         return True
     return False
+
+def get_directory_changes(directory, n_seconds):
+    def get_directory_state(directory):
+        state = {}
+        for root, dirs, files in os.walk(directory):
+            for name in files:
+                path = os.path.join(root, name)
+                state[path] = os.path.getmtime(path)
+        return state
+    def compare_states(state1, state2):
+        added = set(state2) - set(state1)
+        deleted = set(state1) - set(state2)
+        changed = {file for file in state1 if file in state2 and state1[file] != state2[file]}
+        return { 
+            "added": added, 
+            "deleted": deleted, 
+            "changed": changed 
+        }
+    state_1 = get_directory_state(directory)
+    time.sleep(n_seconds)
+    state_2 = get_directory_state(directory)
+    return compare_states(state_1, state_2 )
 
 def get_simple_server(directory, port=8000):
     """
