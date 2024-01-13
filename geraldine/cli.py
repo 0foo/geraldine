@@ -105,15 +105,12 @@ def run():
                 for location in dir_changes["added"]:
                     print("Added: " + location)
                     processor.process_file(location, the_state, the_logger)
-                    print("\n")
                 for location in dir_changes["deleted"]:
                     print("Deleted: " + location)
                     util.delete_path(location)
-                    print("\n")
                 for location in dir_changes["changed"]:
                     print("Changed: " + location)
                     processor.process_file(location, the_state, the_logger)
-                    print("\n")
 
         except KeyboardInterrupt:
             print("\nStopping Watcher")
