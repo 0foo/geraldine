@@ -24,7 +24,7 @@
 processer: [jinja_parser, remove_blank_lines]
 json_path: /somedir/data/myjson.json
 ---
-<div> {{some_variable}}</div>
+<div>{{some_variable}}</div>
 
 
 
@@ -53,8 +53,6 @@ Foo bar!!
     * Then, since that was the last processor, it wrote it to the same directory location except under the distribution directory.
     * The processers operate in order, so it's like a pipeline of one transformation applied, then that data is passed to the next processer.
 
-* Note: this is literally jinja but with front matter and a pipeline to give it more power!
-
 
 ## Directory generation
 * Geri has a parent directory with a `geri_src` and a `geri_dest` directory. (names are customizable)
@@ -65,8 +63,8 @@ Foo bar!!
 
 * Important: `geri_dest` (or whatever your custom destination directory) is continually completely wiped. 
     * Nothing in here is supposed to be touched by humans  
-    * `geri_dest` is supposed to be an ephemeral mirror of `geri_src` and only modified through `geri_src`
-    * Also, Please do not customize the geri destination folder in the config file to a folder with important data in it, as it will be wiped!!!
+    * All files in `geri_dest` are supposed to be an ephemeral processed mirror of `geri_src` and only modified via modifying the files in `geri_src`
+    * Also, Please do not configure the geri destination folder to a folder with important data in it, as it will be wiped!!!
 
 ## More Examples
 * [./geraldine/examples](./geraldine/examples) 
