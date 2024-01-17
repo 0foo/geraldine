@@ -1,14 +1,14 @@
-'''
-Adds indents to every line in the entire file, specified by indent_count paramter in front matter.
-Useful for indenting includes templates.
-'''
-
-
 import os
 from geraldine import util
 
 
 remove_extensions=['jinja']
+
+description="Adds indents to every line in the entire file, specified by indent_count paramter in front matter. Useful for indenting includes templates."
+
+keys=[
+    "indent_count"
+]
 
 def add_indent_to_front(text, spaces_count=4):
     spaces = ' ' * spaces_count

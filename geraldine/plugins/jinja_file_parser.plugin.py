@@ -9,6 +9,18 @@ import logging
 
 environment = jinja2.Environment()
 
+description=""
+
+keys={
+    "json_project_path": "location of the datafile to pass into the jinja template",
+    "filename_key": "How to output the files. This is jinja itself and can use data from in the file: ex: '{{ name  | replace(' ', '_')  }}-{{ source}}'",
+    "extension": "the extension to output on the files",
+    "start_key": "if you need to extract the list to pass into this from nested within the json pass the dot separated key: somekey.anotherkey.0 ",
+    "custom_filter_files": "a list of files, that define custom filter functions that will be passed into the jinja environment",
+    "add_full_data_variable": "adds the entire data dictionary into a variable called geraldine_full_data, in case you need the entire data structure."
+}
+
+
 remove_extensions=['jinja']
 
 the_logger = logging.getLogger("geri_logger")
