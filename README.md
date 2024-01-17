@@ -32,7 +32,7 @@ json_path: /somedir/data/myjson.json
 Foo bar!!!
 
 ```
-* The data file @ `/somedir.data/myjson.json`:
+* The data file located at `/somedir/data/myjson.json`:
 
 ```
 {
