@@ -13,7 +13,7 @@ description="This will create numerous files from a single jinja template file a
 
 keys={
     "json_project_path": "location of the datafile to pass into the jinja template",
-    "filename_key": "How to output the files. This is jinja itself and can use data from in the file: ex: '{{ name  | replace(' ', '_')  }}-{{ source}}'",
+    "filename_key": "Name of the output files. This is jinja itself and can use data from in the file: ex: '{{ name  | replace(' ', '_')  }}-{{ source}}'",
     "extension": "the extension to output on the files",
     "start_key": "if you need to extract the list to pass into this from nested within the json pass the dot separated key: somekey.anotherkey.0 ",
     "custom_filter_files": "a list of files, that define custom filter functions that will be passed into the jinja environment",
