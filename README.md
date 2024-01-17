@@ -11,7 +11,7 @@
     * Extracting smaller portions of json from large hunks of json.
     * Extracting tags and converting those tags to what they actually represent in the file.
     * Adding cool tweaks to files, like removing any blank lines, indenting entire files, prettifying code
-    * Minimizing, obfuscating
+    * Minimizing, obfuscating, appending
     * Generating your actual entire website
     * Any which way you want to manhandle a file, you can do it, just write a plugin.
     
