@@ -12,7 +12,7 @@
     * Extracting tags and converting those tags to what they actually represent in the file.
     * Adding cool tweaks to files, like removing any blank lines, indenting entire files, prettifying code
     * Minimizing, obfuscating, appending
-    * Generating your actual entire website
+    * Generating your actual entire website, functions as a static site generator
     * Any which way you want to manhandle a file, you can do it, just write a plugin.
     
 ## Simple example
