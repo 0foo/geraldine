@@ -4,7 +4,8 @@ from geraldine import util
 
 remove_extensions=['jinja']
 
-description="Adds indents to every line in the entire file, specified by indent_count paramter in front matter. Useful for indenting includes templates."
+description="Adds indents to every line in the entire file, specified by indent_count paramter in front matter." \
+     "Useful for indenting includes templates. Default indent is 4."
 
 keys=[
     "indent_count"

@@ -9,7 +9,7 @@ import logging
 
 environment = jinja2.Environment()
 
-description=""
+description="This will create numerous files from a single jinja template file and a list passed in from a json file."
 
 keys={
     "json_project_path": "location of the datafile to pass into the jinja template",
