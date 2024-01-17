@@ -101,7 +101,7 @@ def run():
         print(f"Watching directory: {source_dir} \nPress Ctrl+C to stop: ")
         try:
             while True:
-                dir_changes = util.get_directory_changes(source_dir, 2)
+                dir_changes = util.get_directory_changes(source_dir, 5)
                 for location in dir_changes["added"]:
                     print("Added: " + location)
                     processor.process_file(location, the_state, the_logger)

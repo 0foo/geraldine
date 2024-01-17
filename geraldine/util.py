@@ -101,18 +101,23 @@ def delete_dir(dirname, error=False):
             print("Error: %s - %s." % (e.filename, e.strerror))
 
 def delete_path(path):
+    if not os.path.exists(path):
+        return False
     try:
         if os.path.isfile(path) or os.path.islink(path):
             # It's a file or a symlink; remove it
             os.remove(path)
+            return True
         elif os.path.isdir(path):
             # It's a directory; remove it and all contained files
             shutil.rmtree(path)
+            return True
         else:
             print(f"Path {path} is a special file (socket, FIFO, device file) and was not removed.")
     except Exception as e:
         print(f"Error removing {path}: {e}")
         
+    return False
 def create_dir(dir, gitkeep=False):
     if not os.path.exists(dir):
         os.makedirs(dir)

@@ -11,10 +11,10 @@ environment = jinja2.Environment()
 
 remove_extensions=['jinja']
 
-def get_custom_filter_files(frontmatter, project_root_path, template_path):
+def get_custom_filter_files(processor_specific_frontmatter, project_root_path, template_path):
     out=[]
-    if "custom_filter_files" in frontmatter:
-        custom_filter_files = frontmatter["custom_filter_files"]
+    if "custom_filter_files" in processor_specific_frontmatter:
+        custom_filter_files = processor_specific_frontmatter["custom_filter_files"]
         if isinstance(custom_filter_files, str):
             custom_filter_files = [custom_filter_files]
         for custom_filter_file in custom_filter_files:
@@ -38,6 +38,10 @@ def load_custom_filters_from_files(env, file_paths):
 
 def geraldine(processor_data):
     frontmatter = processor_data["frontmatter"]
+    if "jinja_parser" in frontmatter:
+        processor_specific_frontmatter=frontmatter["jinja_parser"]
+    else:
+        processor_specific_frontmatter = {}
     template_path = processor_data["src_path"]
     content = processor_data["template_content_string"]
     destination_path = processor_data["destination_path"]
@@ -47,19 +51,19 @@ def geraldine(processor_data):
     destination_dir_name = processor_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
     project_root_src_dir = processor_data["project_root_src_dir"]
-    custom_filter_files = get_custom_filter_files(frontmatter, project_root_path, source_template_dir)
+    custom_filter_files = get_custom_filter_files(processor_specific_frontmatter, project_root_path, source_template_dir)
 
     
 
     json_data = {}
 
-    if "start_key" in frontmatter:
-        start_key_list = frontmatter["start_key"].split(".")
+    if "start_key" in processor_specific_frontmatter:
+        start_key_list = processor_specific_frontmatter["start_key"].split(".")
     else:
         start_key_list = []
 
-    if "json_project_path" in frontmatter:
-        json_project_path = frontmatter["json_project_path"]
+    if "json_project_path" in processor_specific_frontmatter:
+        json_project_path = processor_specific_frontmatter["json_project_path"]
 
         try:
             json_file_path = util.find_file(json_project_path, source_template_dir, project_root_path)
@@ -74,7 +78,7 @@ def geraldine(processor_data):
     
         if isinstance(json_data, list):
             json_data = {"data": json_data}
-            the_logger.info(f"Your json_project_path frontmatter data in {template_path} was pointing to a list, "
+            the_logger.info(f"Your json_project_path the processor frontmatter data in {template_path} was pointing to a list, "
                             "and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\". " 
                             "Use the key \"data\" as the root variable in your jinja template.")
     

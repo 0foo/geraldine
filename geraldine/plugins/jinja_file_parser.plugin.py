@@ -40,10 +40,10 @@ def process_file_name_key(filename):
     pass
 
 
-def get_custom_filter_files(frontmatter, project_root_path, template_path):
+def get_custom_filter_files(processor_specific_frontmatter, project_root_path, template_path):
     out=[]
-    if "custom_filter_files" in frontmatter:
-        custom_filter_files = frontmatter["custom_filter_files"]
+    if "custom_filter_files" in processor_specific_frontmatter:
+        custom_filter_files = processor_specific_frontmatter["custom_filter_files"]
         if isinstance(custom_filter_files, str):
             custom_filter_files = [custom_filter_files]
         for custom_filter_file in custom_filter_files:
@@ -66,25 +66,31 @@ def load_custom_filters_from_files(env, file_paths):
 
 def geraldine(in_data):
     frontmatter = in_data["frontmatter"]
-    json_project_path = frontmatter["json_project_path"]
+    if "jinja_file_parser" in frontmatter:
+        processor_specific_frontmatter=frontmatter["jinja_file_parser"]
+    else:
+        processor_specific_frontmatter = {}
+    json_project_path =  processor_specific_frontmatter["json_project_path"]
     source_path = in_data["src_path"]
     template_dir = os.path.dirname(in_data["src_path"])
     project_root_path = in_data["project_root_path"]
     destination_dir_name = in_data["destination_dir_name"]
     destination_root_path = os.path.join(project_root_path, destination_dir_name)
     project_root_src_dir = in_data["project_root_src_dir"]
-    custom_filter_files = get_custom_filter_files(frontmatter, project_root_path, source_path)
+    custom_filter_files = get_custom_filter_files(processor_specific_frontmatter, project_root_path, source_path)
 
     try:
         json_file_path = util.find_file(json_project_path, template_dir, project_root_path) # the json file
     except Exception as e:
         raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {source_path}")
 
-    filename_key = frontmatter["filename_key"]
+    filename_key =  processor_specific_frontmatter["filename_key"]
     content = in_data["template_content_string"]
     destination_file = in_data["destination_path"]
     destination_dir = os.path.dirname(destination_file)
-    destination_extension = frontmatter["extension"]
+    destination_extension = processor_specific_frontmatter["extension"]
+    if "clear_directory_on_process" in processor_specific_frontmatter and processor_specific_frontmatter["clear_directory_on_process"]:
+        util.clear_directory(destination_dir)
 
     if destination_extension[0] != ".":
         destination_extension = f".{destination_extension}"
@@ -92,8 +98,8 @@ def geraldine(in_data):
     # process start data
     with open(json_file_path, "r") as f:
         json_data = json.load(f)
-    if "start_key" in frontmatter:
-        start_key_list = frontmatter["start_key"].split(".")
+    if "start_key" in processor_specific_frontmatter:
+        start_key_list = processor_specific_frontmatter["start_key"].split(".")
     else:
          start_key_list = []
     dict_to_use = util.dict_lookup_function(json_data, start_key_list)
@@ -121,7 +127,7 @@ def geraldine(in_data):
             filename = jinja_filename_template.render(dict_item)
 
             # process content template
-            if "add_full_data_variable" in frontmatter and frontmatter["add_full_data_variable"]:
+            if "add_full_data_variable" in processor_specific_frontmatter and processor_specific_frontmatter["add_full_data_variable"]:
                 dict_item["geraldine_full_data"] = copy.deepcopy(dict_item)
 
 
