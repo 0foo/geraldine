@@ -17,7 +17,7 @@ class GeriStateManager(StateManager):
 
         self.add_configs({
             "geri_src_dir_name" : "geri_src",
-            "geri_dest_dir_name" : "geri_dist",
+            "geri_dest_dir_name" : "geri_dist", 
             "max_directory_depth" : 10,
             "priority_directories" : [
                 "includes"
@@ -59,9 +59,14 @@ class GeriStateManager(StateManager):
                 "geraldine_directory": os.path.join(self.data.root_directory, ".geraldine")
         })
 
+        self.add_data({
+            "post_process_directory": os.path.join(self.data.geraldine_directory, "post_process")
+        })
+
         # need src_dir 
         self.add_data({
-                "priority_directories": self.build_priority_dirs()
+                "priority_directories": self.build_priority_dirs(),
+                "post_processors": self.load_post_processors()
         })
 
     def build_priority_dirs(self):
@@ -74,22 +79,26 @@ class GeriStateManager(StateManager):
                 priority_dirs.append(the_dir)
         return priority_dirs
 
+    def load_module_from_dir(self, the_dir, modules):
+        for module in util.depth_first_dir_walk(the_dir, max_depth=0):
+            if module.name.endswith('.plugin.py'):
+                the_module = self.import_module_from_path(module.path)
+                modules[module.name[:-10]] = the_module
+
     def load_modules(self):
-        def load_module_from_dir(the_dir, modules):
-            for module in util.depth_first_dir_walk(the_dir, max_depth=0):
-                if module.name.endswith('.plugin.py'):
-                    the_module = self.import_module_from_path(module.path)
-                    modules[module.name[:-10]] = the_module
         modules = {}
-
         # load built in plugins
-        load_module_from_dir(self.data.built_in_plugin_path, modules)
-
+        self.load_module_from_dir(self.data.built_in_plugin_path, modules)
         # load custom plugins from config files
         for plugin_dir in self.configs.custom_plugin_directories:
             if os.path.exists(plugin_dir):
-                load_module_from_dir(plugin_dir, modules)
+                self.load_module_from_dir(plugin_dir, modules)
+        return modules
 
+    def load_post_processors(self):
+        modules = {}
+        if os.path.exists(self.data.post_process_directory):
+            self.load_module_from_dir(self.data.post_process_directory, modules)
         return modules
 
     def get_install_directory(self):

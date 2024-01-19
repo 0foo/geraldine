@@ -10,6 +10,7 @@ import time
 import logging
 import sys
 import copy
+import subprocess
 from watchdog.events import FileSystemEventHandler
 
 
@@ -576,3 +577,27 @@ class StateManager:
                 f.write(f"# {item}: {value} \n")
             f.write("\n")
             yaml.dump(the_out, f)
+    
+    
+def run_scripts_in_directory(directory):
+
+    class ScriptExecutionError(Exception):
+        pass
+
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path):
+            try:
+                if filename.endswith('.sh'):  # Assuming Bash scripts end with .sh
+                    print(f"Running Bash script: {filename}")
+                    result = subprocess.run(['bash', file_path], check=True, text=True, stderr=subprocess.PIPE)
+                elif filename.endswith('.ps1'):  # Assuming PowerShell scripts end with .ps1
+                    print(f"Running PowerShell script: {filename}")
+                    result = subprocess.run(['pwsh', '-File', file_path], check=True, text=True, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as e:
+                error_message = e.stderr if e.stderr else "An unknown error occurred"
+                raise ScriptExecutionError(f"Error occurred while executing {filename}: {error_message}")
+
+# Example usage
+# run_scripts_in_directory('/path/to/your/directory')
+

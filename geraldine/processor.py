@@ -24,6 +24,7 @@ def run(the_state, the_logger):
 
     process(source_dir,the_state,the_logger)
     the_logger.debug(f"Source directory processed successfully: {source_dir}")
+    post_process(the_state, the_logger)
 
 def process_file(location_path, the_state, the_logger):
     name = os.path.basename(location_path)
@@ -135,3 +136,11 @@ def process(in_dir, the_state, the_logger):
             continue
 
         print(f"Couldn't identify node type for: {location.path}")
+
+
+
+def post_process(the_state, the_logger):
+    the_logger.debug("Running post-processors")
+    for name, post_processor in the_state.data.post_processors.items():
+        the_logger.debug(f"Running post processor: {name}")
+        post_processor.geraldine_post_process(the_state, the_logger)

@@ -19,6 +19,7 @@ logger_name = the_state.data.logger_name
 geraldine_directory = the_state.data.geraldine_directory
 custom_plugins = the_state.configs.custom_plugin_directories
 config_file = the_state.config_file_path
+post_process_directory = the_state.data.post_process_directory
 
 util.create_logger(
         logger_name, 
@@ -46,20 +47,13 @@ def run():
     elif args.command == 'init':
         if os.path.exists(geraldine_directory):
             raise Exception(f"Geraldine directory already exists: {source_dir}")
-
-        # create source dir
         util.create_dir(source_dir)
-        
-        # create geraldine dir
         util.create_dir(geraldine_directory)
-        # create custom plugins directories
         for custom_plugin in custom_plugins:
             util.create_dir(custom_plugin)
-
-        # config file
+        util.create_dir(post_process_directory)
         util.touch(config_file)
         the_state.write_configs()
-
         exit()
 
     # serve
