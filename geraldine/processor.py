@@ -141,6 +141,9 @@ def process(in_dir, the_state, the_logger):
 
 def post_process(the_state, the_logger):
     the_logger.debug("Running post-processors")
-    for name, post_processor in the_state.data.post_processors.items():
-        the_logger.debug(f"Running post processor: {name}")
-        post_processor.geraldine_post_process(the_state, the_logger)
+    post_processors = the_state.data.post_processors
+    for post_processors_config_data in the_state.configs.post_processors:
+        post_processor = post_processors_config_data["name"]
+        if post_processor in post_processors:
+            the_logger.debug(f"Running post processor: {post_processor}")
+            post_processors[post_processor].geraldine_post_process(post_processors_config_data, the_state, the_logger)

@@ -60,7 +60,7 @@ class GeriStateManager(StateManager):
         })
 
         self.add_data({
-            "post_process_directory": os.path.join(self.data.geraldine_directory, "post_process")
+            "post_process_directory": os.path.join(install_dir, "post_process")
         })
 
         # need src_dir 
