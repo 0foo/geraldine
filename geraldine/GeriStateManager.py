@@ -22,6 +22,7 @@ class GeriStateManager(StateManager):
             "priority_directories" : [
                 "includes"
             ],
+            "ignored_paths":[],
             "custom_plugin_directories": [
                 ".geraldine/plugins"
             ],
@@ -32,7 +33,8 @@ class GeriStateManager(StateManager):
                 "geri_dest_dir_name": "The directory that processing results will be written to. It's ephemeral, make no changes to this directory, except through, the source directory.",
                 "max_directory_depth": "How many directories deep the system will process.",
                 "priority_directories": "These directories get processed first, in order to do things like add includes",
-                "custom_plugin_directories": "Add your custom plugins in these directories, they will be used if they have a .plugin.py extension and geraldine function inside."
+                "custom_plugin_directories": "Add your custom plugins in these directories, they will be used if they have a .plugin.py extension and geraldine function inside.",
+                "ignored_paths": "paths for the geri processor to ignore, note: can still use as data sources"
             },
         })
 
@@ -66,6 +68,7 @@ class GeriStateManager(StateManager):
         # need src_dir 
         self.add_data({
                 "priority_directories": self.build_priority_dirs(),
+                "ignored_paths": self.build_ignored_paths(),
                 "post_processors": self.load_post_processors()
         })
 
@@ -78,6 +81,17 @@ class GeriStateManager(StateManager):
                 the_dir = os.path.join(self.data.src_dir, directory)
                 priority_dirs.append(the_dir)
         return priority_dirs
+
+
+    def build_ignored_paths(self):
+        ignored_paths = []
+        for path in self.configs.ignored_paths:
+            if os.path.isabs(path):
+                ignored_paths.append(path)
+            else:
+                the_dir = os.path.join(self.data.src_dir, path)
+                ignored_paths.append(the_dir)
+        return ignored_paths
 
     def load_module_from_dir(self, the_dir, modules):
         for module in util.depth_first_dir_walk(the_dir, max_depth=0):

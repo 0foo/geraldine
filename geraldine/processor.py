@@ -22,7 +22,7 @@ def run(the_state, the_logger):
         else:
             the_logger.debug(f"Can't find priority directory: {priority_directory}")
 
-    process(source_dir,the_state,the_logger)
+    process(source_dir, the_state, the_logger)
     the_logger.debug(f"Source directory processed successfully: {source_dir}")
     post_process(the_state, the_logger)
 
@@ -113,6 +113,8 @@ def process(in_dir, the_state, the_logger):
     destination_dir = the_state.data.dest_dir
     destination_dir_name = the_state.configs.geri_dest_dir_name
 
+    # print("IGNORED:")
+    # print(the_state.data.ignored_paths)
     for location in util.depth_first_dir_walk(in_dir, max_depth=max_depth):
         name = location.name
         old_path = util.remove_subpath(location.path, source_dir)
@@ -120,6 +122,17 @@ def process(in_dir, the_state, the_logger):
 
         if name == destination_dir_name:
             continue
+        
+        # print(location.path)
+        to_continue = False
+        for ig_path in the_state.data.ignored_paths:
+            if ig_path in location.path:
+                to_continue=True
+                break
+
+        if to_continue:
+            continue
+        
 
         # is_dir
         if location.is_dir():
