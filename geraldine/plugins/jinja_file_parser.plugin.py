@@ -133,10 +133,13 @@ def geraldine(in_data, the_state, the_logger):
 
     
     for dict_item in dict_to_use:
-
             # process filename template
-            jinja_filename_template = environment.from_string(filename_key)
-            filename = jinja_filename_template.render(dict_item)
+            try: 
+                jinja_filename_template = environment.from_string(filename_key)
+                filename = jinja_filename_template.render(dict_item)
+            except:
+                pprint(dict_item)
+
 
             # process content template
             if "add_full_data_variable" in processor_specific_frontmatter and processor_specific_frontmatter["add_full_data_variable"]:
