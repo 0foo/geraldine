@@ -69,7 +69,7 @@ def run():
                 time.sleep(1)
 
         except KeyboardInterrupt:
-            print("Stopping Server")
+            the_logger.debug("Stopping Server")
             if the_server is not None:
                 the_server.stop_server()
             exit()
@@ -77,14 +77,14 @@ def run():
     # watch  
     elif args.command == 'watch':
         if util.file_exists(lockfile_path):
-            print(f"Watcher lockfile exists, exiting: {lockfile_path}")
+            the_logger.debug(f"Watcher lockfile exists, exiting: {lockfile_path}")
             exit(1)
             
         if not os.path.exists(source_dir):
             raise Exception(f"Can't find source directory: {source_dir}")
         
         util.write_file(lockfile_path, "running")
-        print(f"Watcher lockfile created: {lockfile_path}")
+        the_logger.debug(f"Watcher lockfile created: {lockfile_path}")
         try:
             processor.run(the_state, the_logger)
         except Exception as e:
@@ -92,27 +92,27 @@ def run():
             raise(e)
 
 
-        print(f"Watching directory: {source_dir} \nPress Ctrl+C to stop: ")
+        the_logger.debug(f"Watching directory: {source_dir} \nPress Ctrl+C to stop: ")
         try:
             while True:
                 dir_changes = util.get_directory_changes(source_dir, 2)
                 for location in dir_changes["added"]:
-                    print("Added: " + location)
+                    the_logger.debug("Added: " + location)
                     processor.process_file(location, the_state, the_logger)
                     processor.post_process(the_state, the_logger)
                 for location in dir_changes["deleted"]:
-                    print("Deleted: " + location)
+                    the_logger.debug("Deleted: " + location)
                     util.delete_path(location)
                 for location in dir_changes["changed"]:
-                    print("Changed: " + location)
+                    the_logger.debug("Changed: " + location)
                     processor.process_file(location, the_state, the_logger)
                     processor.post_process(the_state, the_logger)
 
         except KeyboardInterrupt:
-            print("\nStopping Watcher")
+            the_logger.debug("\nStopping Watcher")
   
         util.delete_file(lockfile_path)
-        print(f"Watcher lockfile deleted: {lockfile_path}")
+        the_logger.debug(f"Watcher lockfile deleted: {lockfile_path}")
         exit()
 
     processor.run(the_state, the_logger)

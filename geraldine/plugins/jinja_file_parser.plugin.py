@@ -24,9 +24,8 @@ keys={
 
 remove_extensions=['jinja']
 
-the_logger = logging.getLogger("geri_logger")
 
-def module_apply(processor_data):
+def module_apply(processor_data, the_state, the_logger):
     frontmatter = processor_data["frontmatter"]
     processor_list = frontmatter["processor"]
     modules = processor_data["modules"]
@@ -43,7 +42,7 @@ def module_apply(processor_data):
     for processor in processor_list:
         if processor in modules:
             the_processor=modules[processor]
-            content = the_processor.geraldine(processor_data)
+            content = the_processor.geraldine(processor_data, the_state, the_logger)
             processor_data["template_content_string"] = content
     processor_data["template_content_string"] = original_template_content_string
     return content
@@ -77,7 +76,7 @@ def load_custom_filters_from_files(env, file_paths):
             if callable(func):
                 env.filters[name] = func
 
-def geraldine(in_data):
+def geraldine(in_data, the_state, the_logger):
     frontmatter = in_data["frontmatter"]
     if "jinja_file_parser" in frontmatter:
         processor_specific_frontmatter=frontmatter["jinja_file_parser"]
@@ -116,7 +115,7 @@ def geraldine(in_data):
     else:
          start_key_list = []
     dict_to_use = util.dict_lookup_function(json_data, start_key_list)
-    the_logger.debug(f"There are {len(dict_to_use)} components being build from the {os.path.basename(source_path)} template reading the {os.path.basename(json_project_path)} dataset." )
+    the_logger.info(f"There are {len(dict_to_use)} components being build from the {os.path.basename(source_path)} template reading the {os.path.basename(json_project_path)} dataset." )
 
 
     # iterate
@@ -148,7 +147,7 @@ def geraldine(in_data):
             in_data["merged_template"] = merged_template
 
             # apply additional processors defined in front matter
-            final_content = module_apply(in_data)
+            final_content = module_apply(in_data, the_state, the_logger)
 
             # write to filesystem
             filename = filename + destination_extension

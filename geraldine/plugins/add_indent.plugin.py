@@ -18,7 +18,7 @@ def add_indent_to_front(text, spaces_count=4):
     return '\n'.join(lines_with_spaces)
 
 
-def geraldine(processor_data):
+def geraldine(processor_data, the_state, the_logger):
     frontmatter = processor_data["frontmatter"]
     if "add_indent" in frontmatter:
         processor_specific_frontmatter=frontmatter["add_indent"]

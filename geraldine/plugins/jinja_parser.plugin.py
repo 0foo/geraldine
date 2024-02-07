@@ -4,6 +4,8 @@ import os
 from geraldine import util
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader, DictLoader
 import logging
+import copy
+
 
 the_logger = logging.getLogger("geri_logger")
 
@@ -36,7 +38,7 @@ def load_custom_filters_from_files(env, file_paths):
                 env.filters[name] = func
 
 
-def geraldine(processor_data):
+def geraldine(processor_data, the_state, the_logger):
     frontmatter = processor_data["frontmatter"]
     if "jinja_parser" in frontmatter:
         processor_specific_frontmatter=frontmatter["jinja_parser"]
@@ -62,11 +64,11 @@ def geraldine(processor_data):
     else:
         start_key_list = []
 
-    if "json_project_path" in processor_specific_frontmatter:
-        json_project_path = processor_specific_frontmatter["json_project_path"]
+    if "json_file_project_path" in processor_specific_frontmatter:
+        json_file_project_path = processor_specific_frontmatter["json_file_project_path"]
 
         try:
-            json_file_path = util.find_file(json_project_path, source_template_dir, project_root_path)
+            json_file_path = util.find_file(json_file_project_path, source_template_dir, project_root_path)
         except Exception as e:
             raise FileNotFoundError(f"Cant find json data {e} defined in front matter of: {template_path}.")
         
@@ -78,7 +80,7 @@ def geraldine(processor_data):
     
         if isinstance(json_data, list):
             json_data = {"data": json_data}
-            the_logger.info(f"Your json_project_path the processor frontmatter data in {template_path} was pointing to a list, "
+            the_logger.info(f"Your json_file_project_path the processor frontmatter data in {template_path} was pointing to a list, "
                             "and jinja requires a dict to render. So wrapped it in an dict under the key: \"data\". " 
                             "Use the key \"data\" as the root variable in your jinja template.")
     
@@ -91,6 +93,6 @@ def geraldine(processor_data):
         load_custom_filters_from_files(env, custom_filter_files)
 
     template = env.get_template('the_template') 
-    json_data["geraldine_full_data"] = json_data
+    json_data["geraldine_full_data"] = copy.deepcopy(json_data)
     out =  template.render(json_data)
     return out

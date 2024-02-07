@@ -20,7 +20,7 @@ def run(the_state, the_logger):
             process(priority_directory,the_state,the_logger)
             the_logger.debug(f"Priority directory built: {priority_directory}")
         else:
-            the_logger.debug(f"Can't find priority directory: {priority_directory}")
+            the_logger.error(f"Can't find priority directory: {priority_directory}")
 
     process(source_dir, the_state, the_logger)
     the_logger.debug(f"Source directory processed successfully: {source_dir}")
@@ -82,8 +82,8 @@ def process_file(location_path, the_state, the_logger):
             # Note 2: Trimming down output from File Not Found exceptions, as those are relatively
             #       easy to troubleshoot 
             try:
-                the_logger.debug(f"processing {name} with {processor}" )
-                content = the_processor.geraldine(processor_data)
+                the_logger.info(f"processing {name} with {processor}" )
+                content = the_processor.geraldine(processor_data, the_state, the_logger)
             except FileNotFoundError as e:
                 the_logger.critical(e)
                 continue
