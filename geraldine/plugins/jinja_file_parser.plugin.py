@@ -21,9 +21,7 @@ keys={
     "clear_directory_on_process": "will clear the directory that this is writing to before processing and writing new data to the directory." 
 }
 
-
 remove_extensions=['jinja']
-
 
 def module_apply(processor_data, the_state, the_logger):
     frontmatter = processor_data["frontmatter"]
@@ -140,7 +138,6 @@ def geraldine(in_data, the_state, the_logger):
                 if not filename:
                     raise Exception()
             except:
-                    pprint(dict_item)
                     raise Exception(f"A filename key could not be determined with the filename_key parameter of the template: {source_path}.")
 
 
