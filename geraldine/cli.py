@@ -77,7 +77,7 @@ def run():
     # watch  
     elif args.command == 'watch':
         if util.file_exists(lockfile_path):
-            the_logger.debug(f"Watcher lockfile exists, exiting: {lockfile_path}")
+            the_logger.error(f"Watcher lockfile exists, exiting: {lockfile_path}")
             exit(1)
             
         if not os.path.exists(source_dir):

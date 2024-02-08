@@ -137,8 +137,11 @@ def geraldine(in_data, the_state, the_logger):
             try: 
                 jinja_filename_template = environment.from_string(filename_key)
                 filename = jinja_filename_template.render(dict_item)
+                if not filename:
+                    raise Exception()
             except:
-                pprint(dict_item)
+                    pprint(dict_item)
+                    raise Exception(f"A filename key could not be determined with the filename_key parameter of the template: {source_path}.")
 
 
             # process content template

@@ -47,9 +47,13 @@ def process_file(location_path, the_state, the_logger):
         util.copy_path(location_path, new_path)
         return None 
     
+    if "ignore_processing" in post.metadata and post.metadata["ignore_processing"]:
+        return
+    
     if post.metadata:
         util.delete_path(new_path)
     
+
     frontmatter=post.metadata
     content=post.content
     processor_list = frontmatter["processor"]
