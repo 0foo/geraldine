@@ -39,7 +39,7 @@ def run():
     args = parser.parse_args()
 
     # Execute based on the command
-    if args.command == 'info':
+    if args.command in ['info', None]:
         the_state.print()
         exit()
 
